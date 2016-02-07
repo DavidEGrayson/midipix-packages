@@ -11,3 +11,7 @@ I haven't quite figured out how to copy/install the packages to Windows
 though. For now, just take the files you need from the `pkg` directory and copy
 them to Windows manually using cp.  Copying the whole directoy might be
 difficult because of symbolic links.
+
+See also:
+
+* https://github.com/lalbornoz/midipix_build
