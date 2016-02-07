@@ -1,5 +1,3 @@
-git://midipix.org/$midipix_internal/$pkgname
-
 pkgname=psxtypes
 pkgver=r6.4d71ed8
 pkgrel=1
