@@ -9,11 +9,9 @@ depends=()
 if [ -z "$CROSS" ]; then
   makedepends=('psxtypes')
 else
-  # This depends on psxtypes at build time.
-  # So if you are cross-compiling:
-  # cd /path/to/x86_64-nt64-midipix
-  # tar --exclude='.*' -xf /path/to/psxtypes-r6.4d71ed8-1-midipix64.pkg.tar.xz
-  echo -n
+  echo "This depends on psxtypes at build time. So if you are cross-compiling: "
+  echo "  cd /path/to/x86_64-nt64-midipix"
+  echo "  tar --exclude='.*' -xf /path/to/psxtypes-r6.4d71ed8-1-midipix64.pkg.tar.xz"
 fi
 checkdepends=()
 optdepends=()
@@ -29,7 +27,7 @@ build() {
   rm -rf "build-${CHOST}"
   mkdir "build-${CHOST}"
   cd "build-${CHOST}"
-  "${srcdir}/${pkgname}/configure" --debug --host=${CHOST}
+  "${srcdir}/${pkgname}/configure" --debug --host="${CHOST}"
   make
 }
 
