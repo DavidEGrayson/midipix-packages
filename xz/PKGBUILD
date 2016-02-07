@@ -1,0 +1,48 @@
+# This is an example PKGBUILD file. Use this as a start to creating your own,
+# and remove these comments. For more information, see 'man PKGBUILD'.
+# NOTE: Please fill out the license field for your package! If it is unknown,
+# then please put 'unknown'.
+
+# Maintainer: Your Name <youremail@domain.com>
+pkgname=xz
+pkgver=5.2.2
+pkgrel=1
+pkgdesc='Library and command line tools for XZ and LZMA compressed files'
+arch=('midipix64')
+url='https://tukaani.org/xz'
+license=('GPL' 'LGPL' 'custom')
+depends=()
+makedepends=()
+checkdepends=()
+optdepends=()
+source=(
+    "http://tukaani.org/${pkgname}/${pkgname}-${pkgver}.tar.gz"{,.sig}
+    midipix-config.patch
+    file-group.patch)
+sha256sums=('73df4d5d34f0468bd57d09f2d8af363e95ed6cc3a4a86129d2f2c366259902a2'
+            'SKIP'
+            '0750bd6bad458220945c81dc96b5513239508228e435a1417d6277227ab618fb'
+            '1b5682294867bd7bf187d41634d84bedc2cd0ef148498f283d66f28489618ffb')
+validpgpkeys=('3690C240CE51B4670D30AD1C38EE757D69184620')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  patch -p1 -i ../midipix-config.patch
+  patch -p1 -i ../file-group.patch
+}
+
+build() {
+  rm -rf "build-${CHOST}"
+  mkdir "build-${CHOST}"
+  cd "${srcdir}/build-${CHOST}"
+  "../${pkgname}-${pkgver}/configure" \
+      --host="${CHOST}" --prefix=''
+  make
+}
+
+package() {
+  cd "${srcdir}/build-${CHOST}"
+  make DESTDIR="${pkgdir}" install
+
+  # TODO: install license too
+}

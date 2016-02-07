@@ -1,0 +1,12 @@
+Don't attempt to set the group of the output file.
+--- xz-5.2.1-orig/src/xz/file_io.c
++++ xz-5.2.1/src/xz/file_io.c
+@@ -268,7 +268,7 @@
+ io_copy_attrs(const file_pair *pair)
+ {
+ 	// Skip chown and chmod on Windows.
+-#ifndef TUKLIB_DOSLIKE
++#if !defined(TUKLIB_DOSLIKE) && !defined(__midipix__)
+ 	// This function is more tricky than you may think at first.
+ 	// Blindly copying permissions may permit users to access the
+ 	// destination file who didn't have permission to access the
