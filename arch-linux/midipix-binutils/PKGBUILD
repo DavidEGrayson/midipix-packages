@@ -13,8 +13,7 @@ pkgdesc="Programs to assemble and manipulate binary and object files for midipix
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/binutils/"
 license=('GPL')
-depends=('glibc' 'zlib' 'binutils')
-#install=midipix-binutils.install
+depends=('zlib')
 source=("ftp://sourceware.org/pub/binutils/snapshots/binutils-${pkgver}.tar.bz2"
         "http://git.midipix.org/cgit.cgi/ports/portage/plain/binutils-${pkgver}.midipix.patch")
 sha256sums=('250d3b2925c6b211fb16173b0b25bc091c58829fbcad3eb849645e0af52cf7fa'
