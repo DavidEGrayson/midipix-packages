@@ -46,16 +46,6 @@ build() {
     --target=${_target} \
     --disable-werror
 
-  #  --enable-ld=default \
-  #  --enable-gold \
-  #  --enable-plugins \
-  #  --enable-threads \
-  #  --with-pic \
-  #  --enable-shared \
-  #  --disable-werror \
-  #  --disable-multilib \
-  #  --build=${config_guess} \
-
   # This checks the host environment for necessary tools.
   make configure-host
 
