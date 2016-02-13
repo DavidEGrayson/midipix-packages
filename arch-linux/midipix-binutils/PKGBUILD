@@ -1,5 +1,8 @@
 # Maintainer: David Grayson <davidegrayson@gmail.com>
 
+# Warning: The 32-bit linker scripts like /usr/lib/ldscripts/i386pe.x
+# might cause a conflict with a future binutils for midipix32.
+
 _target=x86_64-nt64-midipix
 _arch=nt64
 
@@ -30,13 +33,13 @@ build() {
 
   cd "${srcdir}/build"
 
-  # If we leave CPPFLAGS alone, the configure script for libibtery in binutils
+  # If we leave CPPFLAGS alone, the configure script for libiberty in binutils
   # 2.24.51 thinks that limits.h does not exist, because limits.h includes
   # features.h which issues a warning about how optimizations are required to
   # use _FORTIFY_SOURCE, because makepkg.conf defines _FORTIFY_SOURCE=2.  You
   # can reproduce this with:
-  #     CPPFLAGS=-D_FORTIFY_SOURCE=2 ../binutils-2.24.51/libiberty/configure \
-  #       --target=x86_64-nt64-midipix && grep HAVE_LIMITS_H config.h
+  #     CPPFLAGS=-D_FORTIFY_SOURCE=2 ../binutils-2.24.51/libiberty/configure
+  #     grep HAVE_LIMITS_H config.h
   # Solution: Add -O2 to the CPP flags to silence the warning.
   CPPFLAGS="-O2 $CPPFLAGS"
 
@@ -65,12 +68,12 @@ package() {
 
   make prefix=${pkgdir}/usr tooldir=${pkgdir}/usr install
 
-  for bin in ar as nm objcopy objdump ranlib strip readelf; do
+  for bin in ar as nm objcopy objdump ranlib strip readelf dlltool; do
     rm -f ${pkgdir}/usr/bin/${bin}
   done
 
   for info in as bfd binutils gprof ld; do
-    mv ${pkgdir}/usr/share/info/${info}.info ${pkgdir}/usr/share/info/avr-${info}.info
+    mv ${pkgdir}/usr/share/info/${info}.info ${pkgdir}/usr/share/info/${_target}-${info}.info
   done
 
   rm -r ${pkgdir}/usr/share/locale
