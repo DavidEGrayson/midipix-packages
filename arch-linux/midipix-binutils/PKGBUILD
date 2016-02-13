@@ -30,14 +30,19 @@ build() {
 
   cd "${srcdir}/build"
 
-  # If we leave CPPFLAGS alone, the configure script for libibtery thinks that limits.h does not exist, because limits.h includes features.h which issues a warning about how optimizations are required to use _FORTIFY_SOURCE, because makepkg.conf defines _FORTIFY_SOURCE=2.
-  # You can reproduce this with:
-  #   gcc -E --D_FORTIFY_SOURCE=2 conftest.c 2> conftest.err && test -s conftest.err && echo bad
-  # Solution: Added -O2 to the CPP flags.
+  # If we leave CPPFLAGS alone, the configure script for libibtery in binutils
+  # 2.24.51 thinks that limits.h does not exist, because limits.h includes
+  # features.h which issues a warning about how optimizations are required to
+  # use _FORTIFY_SOURCE, because makepkg.conf defines _FORTIFY_SOURCE=2.  You
+  # can reproduce this with:
+  #     CPPFLAGS=-D_FORTIFY_SOURCE=2 ../binutils-2.24.51/libiberty/configure \
+  #       --target=x86_64-nt64-midipix && grep HAVE_LIMITS_H config.h
+  # Solution: Add -O2 to the CPP flags to silence the warning.
   CPPFLAGS="-O2 $CPPFLAGS"
 
   ${srcdir}/binutils-${pkgver}/configure \
-    --target=${_target}
+    --target=${_target} \
+    --disable-werror
 
   #  --enable-ld=default \
   #  --enable-gold \
@@ -51,23 +56,22 @@ build() {
 
   # This checks the host environment for necessary tools.
   make configure-host
-  grep HAVE_LIMITS_H `find -name config.h`
 
-  make #tooldir=/usr
+  make
 }
 
 package() {
-    cd ${srcdir}/${_builddir}
+  cd "${srcdir}/build"
 
-    make prefix=${pkgdir}/usr tooldir=${pkgdir}/usr install
+  make prefix=${pkgdir}/usr tooldir=${pkgdir}/usr install
 
-    for bin in ar as nm objcopy objdump ranlib strip readelf; do
-        rm -f ${pkgdir}/usr/bin/${bin}
-    done
+  for bin in ar as nm objcopy objdump ranlib strip readelf; do
+    rm -f ${pkgdir}/usr/bin/${bin}
+  done
 
-    for info in as bfd binutils gprof ld; do
-        mv ${pkgdir}/usr/share/info/${info}.info ${pkgdir}/usr/share/info/avr-${info}.info
-    done
+  for info in as bfd binutils gprof ld; do
+    mv ${pkgdir}/usr/share/info/${info}.info ${pkgdir}/usr/share/info/avr-${info}.info
+  done
 
-    rm -r ${pkgdir}/usr/share/locale
+  rm -r ${pkgdir}/usr/share/locale
 }
