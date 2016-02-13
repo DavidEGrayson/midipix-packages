@@ -1,0 +1,73 @@
+# Maintainer: David Grayson <davidegrayson@gmail.com>
+
+_target=x86_64-nt64-midipix
+_arch=nt64
+
+pkgname=midipix64-binutils
+pkgver=2.24.51
+pkgrel=1
+pkgdesc="Programs to assemble and manipulate binary and object files for midipix"
+arch=('i686' 'x86_64')
+url="http://www.gnu.org/software/binutils/"
+license=('GPL')
+depends=('glibc' 'zlib' 'binutils')
+#install=midipix-binutils.install
+source=("ftp://sourceware.org/pub/binutils/snapshots/binutils-${pkgver}.tar.bz2"
+        "http://git.midipix.org/cgit.cgi/ports/portage/plain/binutils-${pkgver}.midipix.patch")
+sha256sums=('250d3b2925c6b211fb16173b0b25bc091c58829fbcad3eb849645e0af52cf7fa'
+            'a0416bd5ae94dcf08fea96b31e1cc129c0731bad17a2e92a5a835f4c72770359')
+
+prepare() {
+  cd "${srcdir}/binutils-${pkgver}"
+  rm -f bfd/midipix.h  # this file might already be present from a previous run
+  patch -p1 -i "../binutils-${pkgver}.midipix.patch"
+}
+
+build() {
+  rm -rf "${srcdir}/build"
+  mkdir "${srcdir}/build"
+  cd "${srcdir}/binutils-${pkgver}"
+
+  cd "${srcdir}/build"
+
+  # If we leave CPPFLAGS alone, the configure script for libibtery thinks that limits.h does not exist, because limits.h includes features.h which issues a warning about how optimizations are required to use _FORTIFY_SOURCE, because makepkg.conf defines _FORTIFY_SOURCE=2.
+  # You can reproduce this with:
+  #   gcc -E --D_FORTIFY_SOURCE=2 conftest.c 2> conftest.err && test -s conftest.err && echo bad
+  # Solution: Added -O2 to the CPP flags.
+  CPPFLAGS="-O2 $CPPFLAGS"
+
+  ${srcdir}/binutils-${pkgver}/configure \
+    --target=${_target}
+
+  #  --enable-ld=default \
+  #  --enable-gold \
+  #  --enable-plugins \
+  #  --enable-threads \
+  #  --with-pic \
+  #  --enable-shared \
+  #  --disable-werror \
+  #  --disable-multilib \
+  #  --build=${config_guess} \
+
+  # This checks the host environment for necessary tools.
+  make configure-host
+  grep HAVE_LIMITS_H `find -name config.h`
+
+  make #tooldir=/usr
+}
+
+package() {
+    cd ${srcdir}/${_builddir}
+
+    make prefix=${pkgdir}/usr tooldir=${pkgdir}/usr install
+
+    for bin in ar as nm objcopy objdump ranlib strip readelf; do
+        rm -f ${pkgdir}/usr/bin/${bin}
+    done
+
+    for info in as bfd binutils gprof ld; do
+        mv ${pkgdir}/usr/share/info/${info}.info ${pkgdir}/usr/share/info/avr-${info}.info
+    done
+
+    rm -r ${pkgdir}/usr/share/locale
+}
