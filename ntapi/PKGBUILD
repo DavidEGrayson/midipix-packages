@@ -7,7 +7,7 @@ url='http://git.midipix.org/cgit.cgi/${midipix_internal}/${pkgname}'
 license=('GPLv2' 'GPLv3')
 depends=()
 if [ -z "$CROSS" ]; then
-  makedepends=('psxtypes', 'dalist', 'pemagine')
+  makedepends=('psxtypes' 'dalist' 'pemagine')
 fi
 checkdepends=()
 optdepends=()
