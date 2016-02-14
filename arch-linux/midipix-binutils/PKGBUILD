@@ -4,9 +4,8 @@
 # might cause a conflict with a future binutils for midipix32.
 
 _target=x86_64-nt64-midipix
-_arch=nt64
 
-pkgname=midipix64-binutils
+pkgname=$_target-binutils
 pkgver=2.24.51
 pkgrel=1
 pkgdesc="Programs to assemble and manipulate binary and object files for midipix"
@@ -28,7 +27,6 @@ prepare() {
 build() {
   rm -rf "${srcdir}/build"
   mkdir "${srcdir}/build"
-  cd "${srcdir}/binutils-${pkgver}"
 
   cd "${srcdir}/build"
 
