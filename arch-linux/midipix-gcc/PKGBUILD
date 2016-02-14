@@ -1,0 +1,93 @@
+# Maintainer: David Grayson <davidegrayson@gmail.com>
+
+_target=x86_64-nt64-midipix
+_gccver=4.6.4
+
+pkgname=midipix64-gcc-git
+provides=(midipix64-gcc)
+conflicts=(midipix64-gcc)
+pkgver=4.6.4.r58.53d53a0
+pkgrel=1
+pkgdesc="The GNU Compiler Collection - cross compiler for midipix 64-bit target"
+arch=('i686' 'x86_64')
+url="http://gcc.gnu.org/"
+license=('GPL' 'LGPL' 'FDL')
+depends=($_target-binutils zlib libmpc)
+makedepends=(mpfr)
+source=("git://midipix.org/cbb/cbb-gcc-${_gccver}")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "${srcdir}/cbb-gcc-${_gccver}"
+  printf "%s.r%s.%s" "$_gccver" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  rm -rf "${srcdir}/build"
+  mkdir "${srcdir}/build"
+
+  cd "${srcdir}/build"
+
+  # TODO: try to incorporate the flags from makepkg.conf instead of overriding them
+
+  #GCCFLAGS="--include $(pwd)/../cbb-gcc-${_gccver}/libc/cbb-musl-pe.h"
+  GCCFLAGS=""
+  GCCTARGET_FLAGS="-DIN_TARGET_LIBRARY_BUILD"
+
+  export CPPFLAGS="$GCCFLAGS"  # see the note about _FORTIFY_SOURCE in binutils script
+  export CFLAGS="$GCCFLAGS"
+  export CXXFLAGS="$GCCFLAGS"
+
+  export CFLAGS_FOR_BUILD="$GCCFLAGS"
+  export CPPFLAGS_FOR_BUILD="$GCCFLAGS"
+  export CXXFLAGS_FOR_BUILD="$GCCFLAGS"
+
+  export CFLAGS_FOR_TARGET="$GCCTARGET_FLAGS"
+  export XGCC_FLAGS_FOR_TARGET="$GCCTARGET_FLAGS"
+  export CPPFLAGS_FOR_TARGET="$GCCTARGET_FLAGS"
+  export CXXFLAGS_FOR_TARGET="$GCCTARGET_FLAGS"
+  export LIBCFLAGS_FOR_TARGET="$GCCTARGET_FLAGS"
+
+  export cbb_neutral_libiberty=no
+  export cbb_target=$TARGET
+  export cbb_xgcc_for_specs="$(pwd)/gcc/xgcc"
+  export cbb_ldflags_for_target="--sysroot=$PREFIX/$TARGET"
+  export cbb_sysroot_for_libgcc="$PREFIX/$TARGET"
+  export cbb_cflags_for_stage1="$CFLAGS_FOR_BUILD"
+  export cbb_cflags_for_stage2="$CFLAGS_FOR_BUILD"
+  export cbb_cflags_for_stage3="$CFLAGS_FOR_BUILD"
+  export cbb_cflags_for_stage4="$CFLAGS_FOR_BUILD"
+
+  ../cbb-gcc-${_gccver}/configure \
+    --target=${_target} \
+    --disable-nls \
+    --disable-multilib \
+    --disable-libmudflap \
+    --disable-obsolete \
+    --disable-symvers \
+    --disable-sjlj-exceptions \
+    --with-fpmath=sse \
+    --enable-multiarch \
+    --enable-shared \
+    --enable-initfini-array \
+    --enable-threads=posix \
+    --enable-lto \
+    --enable-__cxa_atexit \
+    --enable-gnu-indirect-function \
+    --enable-gnu-unique-object \
+    --enable-libstdcxx-debug \
+    --enable-canonical-system-headers \
+    --enable-languages=c,c++,objc,lto \
+    --enable-secureplt \
+    --enable-debug \
+    --disable-bootstrap
+  touch configure.skip
+
+  make all-gcc
+}
+
+package() {
+  cd "${srcdir}/build"
+
+  make DESTDIR=${pkgdir} install-gcc
+}
