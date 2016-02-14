@@ -47,12 +47,11 @@ build() {
   export CXXFLAGS_FOR_TARGET="$GCCTARGET_FLAGS"
   export LIBCFLAGS_FOR_TARGET="$GCCTARGET_FLAGS"
 
-  # TODO: fix these variables that use $PREFIX and $TARGET
   export cbb_neutral_libiberty=no
-  export cbb_target=$TARGET
+  export cbb_target=$_target
   export cbb_xgcc_for_specs="$(pwd)/gcc/xgcc"
-  export cbb_ldflags_for_target="--sysroot=$PREFIX/$TARGET"
-  export cbb_sysroot_for_libgcc="$PREFIX/$TARGET"
+  export cbb_ldflags_for_target="--sysroot=/usr/$_target"
+  export cbb_sysroot_for_libgcc="/usr/$_target"
   export cbb_cflags_for_stage1="$CFLAGS_FOR_BUILD"
   export cbb_cflags_for_stage2="$CFLAGS_FOR_BUILD"
   export cbb_cflags_for_stage3="$CFLAGS_FOR_BUILD"
