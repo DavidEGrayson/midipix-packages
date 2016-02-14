@@ -1,0 +1,33 @@
+# Maintainer: David Grayson <davidegrayson@gmail.com>
+
+_target=x86_64-nt64-midipix
+
+pkgname=$_target-psxstub
+conflicts=($_target-psxscl)
+pkgver=r8.11957ad
+pkgrel=1
+pkgdesc="Stub that stands in for psxscl for building the toolchain."
+arch=('i686' 'x86_64')
+url="http://git.midipix.org/cgit.cgi/psxstub/"
+license=('unknown')
+makedepends=($_target-gcc-stage1)
+source=("git://midipix.org/psxstub")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "${srcdir}/psxstub"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  rm -rf "${srcdir}/build"
+  mkdir "${srcdir}/build"
+  cd "${srcdir}/build"
+  cp ../psxstub/stub.S ../psxstub/Makefile .
+  make TARGET=$_target
+}
+
+package() {
+  cd "${srcdir}/build"
+  make DESTDIR="$pkgdir" install
+}
