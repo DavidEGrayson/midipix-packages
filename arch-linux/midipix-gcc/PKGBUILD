@@ -35,7 +35,7 @@ build() {
   # TODO: try to incorporate the flags from makepkg.conf instead of overriding them
 
   GCCFLAGS="--include $(pwd)/../cbb-gcc-${_gccver}/libc/cbb-musl-pe.h"
-  GCCTARGET_FLAGS="-DIN_TARGET_LIBRARY_BUILD"
+  GCCTARGET_FLAGS="-DIN_TARGET_LIBRARY_BUILD --sysroot=/usr/$_target"
 
   export CPPFLAGS=""  # see the note about _FORTIFY_SOURCE in binutils script
   export CFLAGS="$GCCFLAGS"
