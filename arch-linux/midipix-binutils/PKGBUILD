@@ -41,6 +41,7 @@ build() {
   CPPFLAGS="-O2 $CPPFLAGS"
 
   ${srcdir}/binutils-${pkgver}/configure \
+    --prefix=/usr \
     --target=${_target} \
     --disable-werror
 
