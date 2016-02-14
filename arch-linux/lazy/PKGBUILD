@@ -1,0 +1,27 @@
+# Maintainer: David Grayson <davidegrayson@gmail.com>
+
+pkgname=lazy-git
+provides=(lazy)
+conflicts=(lazy)
+pkgver=r12.04984a9
+pkgrel=1
+pkgdesc="A shell-based build system for the digital humanities"
+arch=('any')
+url="http://git.midipix.org/cgit.cgi/lazy"
+license=('MIT')
+source=("git://midipix.org/lazy")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "${srcdir}/lazy"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+package() {
+  cd "${srcdir}/lazy"
+  mkdir -p "${pkgdir}/usr/share/lazy"
+  cp -r * "${pkgdir}/usr/share/lazy"
+
+  mkdir -p "${pkgdir}/usr/bin"
+  cp ../../lazy-runner "${pkgdir}/usr/bin/lazy"
+}
