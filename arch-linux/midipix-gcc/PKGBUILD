@@ -3,9 +3,9 @@
 _target=x86_64-nt64-midipix
 _gccver=4.6.4
 
-pkgname=midipix64-gcc-git
-provides=(midipix64-gcc)
-conflicts=(midipix64-gcc)
+pkgname=$_target-gcc-git
+provides=($_target-gcc)
+conflicts=($_target-gcc)
 pkgver=4.6.4.r58.53d53a0
 pkgrel=1
 pkgdesc="The GNU Compiler Collection - cross compiler for midipix 64-bit target"
@@ -30,11 +30,11 @@ build() {
 
   # TODO: try to incorporate the flags from makepkg.conf instead of overriding them
 
-  #GCCFLAGS="--include $(pwd)/../cbb-gcc-${_gccver}/libc/cbb-musl-pe.h"
+  GCCFLAGS="--include $(pwd)/../cbb-gcc-${_gccver}/libc/cbb-musl-pe.h"
   GCCFLAGS=""
   GCCTARGET_FLAGS="-DIN_TARGET_LIBRARY_BUILD"
 
-  export CPPFLAGS="$GCCFLAGS"  # see the note about _FORTIFY_SOURCE in binutils script
+  export CPPFLAGS=""  # see the note about _FORTIFY_SOURCE in binutils script
   export CFLAGS="$GCCFLAGS"
   export CXXFLAGS="$GCCFLAGS"
 
@@ -59,6 +59,7 @@ build() {
   export cbb_cflags_for_stage4="$CFLAGS_FOR_BUILD"
 
   ../cbb-gcc-${_gccver}/configure \
+    --prefix=/usr \
     --target=${_target} \
     --disable-nls \
     --disable-multilib \
