@@ -1,23 +1,30 @@
 # Maintainer: David Grayson <davidegrayson@gmail.com>
 
 # Note: Right now this package just does "GCC, stage 1" from
-# http://git.midipix.org/cgit.cgi/cbb/cbb-gcc/tree/cbb-midipix-cross-gcc.sh#n123
-# I'm not sure how to package up musl and the other parts of gcc.
+# http://git.midipix.org/cgit.cgi/cbb/cbb-gcc/tree/cbb-midipix-cross-gcc.sh
 
 _target=x86_64-nt64-midipix
 _gccver=4.6.4
 
-pkgname=$_target-gcc-git
-provides=($_target-gcc)
-conflicts=($_target-gcc)
+if [ -n "$MIDIPIX_GCC_STAGE1" ]; then
+  pkgname=$_target-gcc-stage1-git
+  provides=($_target-gcc-stage1)
+  depends=(zlib libmpc $_target-binutils)
+  makedepends=(mpfr)
+else
+  pkgname=$_target-gcc-git
+  provides=($_target-gcc $_target-gcc-stage1)
+  replaces=($_target-gcc-stage1)
+  depends=(zlib libmpc $_target-binutils $_target-libc)
+  makedepends=(mpfr)
+  conflicts=($_target-gcc-stage1)  # TODO: add a conflict with the -git package?
+fi
 pkgver=4.6.4.r58.53d53a0
 pkgrel=1
 pkgdesc="The GNU Compiler Collection - cross compiler for midipix 64-bit target"
 arch=('i686' 'x86_64')
 url="http://gcc.gnu.org/"
 license=('GPL' 'LGPL' 'FDL')
-depends=($_target-binutils zlib libmpc)
-makedepends=(mpfr)
 source=("git://midipix.org/cbb/cbb-gcc-${_gccver}")
 sha256sums=('SKIP')
 
@@ -94,4 +101,8 @@ package() {
   cd "${srcdir}/build"
 
   make DESTDIR=${pkgdir} install-gcc
+
+  # Remove files that could conflict with host GCC.
+  rm -r "${pkgdir}/usr/share/info"
+  rm -r "${pkgdir}/usr/share/man/man7"
 }
