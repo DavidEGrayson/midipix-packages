@@ -15,9 +15,9 @@ else
   pkgname=$_target-gcc-git
   provides=($_target-gcc $_target-gcc-stage1)
   replaces=($_target-gcc-stage1)
+  conflicts=($_target-gcc-stage1)  # TODO: add a conflict with the -git package?
   depends=(zlib libmpc $_target-binutils $_target-libc)
   makedepends=(mpfr)
-  conflicts=($_target-gcc-stage1)  # TODO: add a conflict with the -git package?
 fi
 pkgver=4.6.4.r58.53d53a0
 pkgrel=1
