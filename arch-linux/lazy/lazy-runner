@@ -1,2 +1,2 @@
 #!/bin/sh
-/usr/share/lazy/lazy "$@"
+exec /usr/share/lazy/lazy "$@"
