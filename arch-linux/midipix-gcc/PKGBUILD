@@ -1,5 +1,9 @@
 # Maintainer: David Grayson <davidegrayson@gmail.com>
 
+# Note: Right now this package just does "GCC, stage 1" from
+# http://git.midipix.org/cgit.cgi/cbb/cbb-gcc/tree/cbb-midipix-cross-gcc.sh#n123
+# I'm not sure how to package up musl and the other parts of gcc.
+
 _target=x86_64-nt64-midipix
 _gccver=4.6.4
 
