@@ -7,9 +7,9 @@ _target=x86_64-nt64-midipix
 _arch=nt64
 _muslver=1.1.12
 
-pkgname=$_target-libc-git
-provides=($_target-libc)
-conflicts=($_target-libc)
+pkgname=$_target-musl-git
+provides=($_target-musl)
+conflicts=($_target-musl)
 pkgver=1.1.12.r47.c5e6e59
 pkgrel=1
 pkgdesc="C standard library implementation (musl) for midipix 64-bit target"
@@ -58,4 +58,8 @@ package() {
   # Note: Thelibraries seem to get re-linked during this time because
   # install_no_complex.
   ./lazy -x build -e install_no_complex
+
+  # Because lazy doesn't support DESTDIR or equivalent, our build directory gets
+  # baked into musl-gcc.specs.
+  sed -i -e "s|${pkgdir}|" "${pkgdir}/usr/${_target}/lib/musl-gcc.specs
 }
