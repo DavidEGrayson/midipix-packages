@@ -13,6 +13,7 @@ license=('unknown')
 makedepends=($_target-gcc-stage1)
 source=("git://midipix.org/psxstub")
 sha256sums=('SKIP')
+options=(!strip)
 
 pkgver() {
   cd "${srcdir}/psxstub"
