@@ -1,26 +1,36 @@
 # Maintainer: David Grayson <davidegrayson@gmail.com>
 
+# TODO: what does "-e install_no_complex" mean, and do we need to make
+# this into a multi-stage package like gcc?
+
 _target=x86_64-nt64-midipix
+_arch=nt64
 _muslver=1.1.12
 
 pkgname=$_target-libc-git
 provides=($_target-libc)
 conflicts=($_target-libc)
-pkgver=1.1.12.r58.53d53a0
+pkgver=1.1.12.r47.c5e6e59
 pkgrel=1
 pkgdesc="C standard library implementation (musl) for midipix 64-bit target"
 arch=('i686' 'x86_64')
-url="http://gcc.gnu.org/"
+url="http://www.musl-libc.org/"
 license=('TODO')
-makedepends=($_target-gcc lazy)
+makedepends=($_target-gcc-stage1 lazy)
+options=(!strip)
 source=("http://www.musl-libc.org/releases/musl-${_muslver}.tar.gz"
         "git://midipix.org/mmglue")
-sha256sums=('abc'
+sha256sums=('720b83c7e276b4b679c0bffe9509340d5f81fd601508e607e708177df0d31c0e'
             'SKIP')
 
 pkgver() {
   cd "${srcdir}/mmglue"
-  printf "%s.r%s.%s" "$_gccver" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+  printf "%s.r%s.%s" "$_muslver" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+prepare() {
+  cd "${srcdir}/musl-${_muslver}"
+  cp -R ../mmglue/* .
 }
 
 build() {
@@ -29,66 +39,23 @@ build() {
 
   cd "${srcdir}/build"
 
-  # TODO: try to incorporate the flags from makepkg.conf instead of overriding them
+  export lz_cflags_debug="-g3 -O0"  # for now, allow easy debugging
+  lazy \
+      -x config \
+      -t $_target \
+      -a $_arch \
+      -c gcc \
+      -n musl \
+      -p "../musl-${_muslver}" \
+      -f "${pkgdir}/usr/${_target}"
 
-  GCCFLAGS="--include $(pwd)/../cbb-gcc-${_gccver}/libc/cbb-musl-pe.h"
-  GCCTARGET_FLAGS="-DIN_TARGET_LIBRARY_BUILD"
-
-  export CPPFLAGS=""  # see the note about _FORTIFY_SOURCE in binutils script
-  export CFLAGS="$GCCFLAGS"
-  export CXXFLAGS="$GCCFLAGS"
-
-  export CFLAGS_FOR_BUILD="$GCCFLAGS"
-  export CPPFLAGS_FOR_BUILD="$GCCFLAGS"
-  export CXXFLAGS_FOR_BUILD="$GCCFLAGS"
-
-  export CFLAGS_FOR_TARGET="$GCCTARGET_FLAGS"
-  export XGCC_FLAGS_FOR_TARGET="$GCCTARGET_FLAGS"
-  export CPPFLAGS_FOR_TARGET="$GCCTARGET_FLAGS"
-  export CXXFLAGS_FOR_TARGET="$GCCTARGET_FLAGS"
-  export LIBCFLAGS_FOR_TARGET="$GCCTARGET_FLAGS"
-
-  export cbb_neutral_libiberty=no
-  export cbb_target=$_target
-  export cbb_xgcc_for_specs="$(pwd)/gcc/xgcc"
-  export cbb_ldflags_for_target="--sysroot=/usr/$_target"
-  export cbb_sysroot_for_libgcc="/usr/$_target"
-  export cbb_cflags_for_stage1="$CFLAGS_FOR_BUILD"
-  export cbb_cflags_for_stage2="$CFLAGS_FOR_BUILD"
-  export cbb_cflags_for_stage3="$CFLAGS_FOR_BUILD"
-  export cbb_cflags_for_stage4="$CFLAGS_FOR_BUILD"
-
-  ../cbb-gcc-${_gccver}/configure \
-    --prefix=/usr \
-    --target=${_target} \
-    --disable-nls \
-    --disable-multilib \
-    --disable-libmudflap \
-    --disable-obsolete \
-    --disable-symvers \
-    --disable-sjlj-exceptions \
-    --with-fpmath=sse \
-    --enable-multiarch \
-    --enable-shared \
-    --enable-initfini-array \
-    --enable-threads=posix \
-    --enable-lto \
-    --enable-__cxa_atexit \
-    --enable-gnu-indirect-function \
-    --enable-gnu-unique-object \
-    --enable-libstdcxx-debug \
-    --enable-canonical-system-headers \
-    --enable-languages=c,c++,objc,lto \
-    --enable-secureplt \
-    --enable-debug \
-    --disable-bootstrap
-  touch configure.skip
-
-  make all-gcc
+  ./lazy -x build -e libc_no_complex
 }
 
 package() {
   cd "${srcdir}/build"
 
-  make DESTDIR=${pkgdir} install-gcc
+  # Note: Thelibraries seem to get re-linked during this time because
+  # install_no_complex.
+  ./lazy -x build -e install_no_complex
 }

@@ -11,9 +11,9 @@ arch=('i686' 'x86_64')
 url="http://git.midipix.org/cgit.cgi/psxstub/"
 license=('unknown')
 makedepends=($_target-gcc-stage1)
+options=(!strip)
 source=("git://midipix.org/psxstub")
 sha256sums=('SKIP')
-options=(!strip)
 
 pkgver() {
   cd "${srcdir}/psxstub"
