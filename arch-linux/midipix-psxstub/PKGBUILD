@@ -25,10 +25,10 @@ build() {
   mkdir "${srcdir}/build"
   cd "${srcdir}/build"
   cp ../psxstub/stub.S ../psxstub/Makefile .
-  make TARGET=$_target
+  make TARGET="$_target"
 }
 
 package() {
   cd "${srcdir}/build"
-  make DESTDIR="$pkgdir" install
+  make TARGET="$_target" DESTDIR="${pkgdir}/usr/${_target}" install
 }
