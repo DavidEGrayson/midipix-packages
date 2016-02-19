@@ -38,6 +38,7 @@ url="http://gcc.gnu.org/"
 license=('GPL' 'LGPL' 'FDL')
 source=("git://midipix.org/cbb/cbb-gcc-${_gccver}")
 sha256sums=('SKIP')
+options=(!strip)  # TODO: strip the native binaries though
 
 pkgver() {
   cd "${srcdir}/cbb-gcc-${_gccver}"
