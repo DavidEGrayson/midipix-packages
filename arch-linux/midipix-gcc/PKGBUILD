@@ -20,6 +20,7 @@ elif [ "$MIDIPIX_GCC_STAGE" -eq 2 ]; then
   # Stage 2: compiler and libgcc
   pkgname=$_target-gcc-stage2-git
   provides=($_target-gcc-stage2 $_target-gcc-stage1)
+  replaces=($_target-gcc-stage1)
   depends=(zlib libmpc $_target-binutils $_target-musl-stage1 $_target-psxstub)
   makedepends=(mpfr)
 else
