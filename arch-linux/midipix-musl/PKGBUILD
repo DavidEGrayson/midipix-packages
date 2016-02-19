@@ -1,22 +1,32 @@
 # Maintainer: David Grayson <davidegrayson@gmail.com>
 
-# TODO: what does "-e install_no_complex" mean, and do we need to make
-# this into a multi-stage package like gcc?
+# TODO: for stage1 midipix, I think what is done in arch/nt32/src/nt32/chelper.S
+# is not very safe.  Could we get by without defining those dummy functions?
+# Could we at least perform a division by zero or something in them?
 
 _target=x86_64-nt64-midipix
 _arch=nt64
 _muslver=1.1.12
 
-pkgname=$_target-musl-git
-provides=($_target-musl)
-conflicts=($_target-musl)
-pkgver=1.1.12.r47.c5e6e59
+if [ -n "$MIDIPIX_MUSL_STAGE1" ]; then
+  pkgname=$_target-musl-stage1-git
+  provides=($_target-musl-stage1)
+  replaces=()
+  conflicts=()
+  makedepends=($_target-gcc-stage1 lazy)
+else
+  pkgname=$_target-musl-git
+  provides=($_target-musl $_target-musl-stage1)
+  replaces=($_target-musl-stage1)
+  conflicts=($_target-musl-stage1)
+  makedepends=($_target-gcc-stage2 lazy)
+fi
+pkgver=1.1.12.r48.e43f5af
 pkgrel=1
 pkgdesc="C standard library implementation (musl) for midipix 64-bit target"
-arch=('i686' 'x86_64')
+arch=('any')
 url="http://www.musl-libc.org/"
 license=('TODO')
-makedepends=($_target-gcc-stage1 lazy)
 options=(!strip)
 source=("http://www.musl-libc.org/releases/musl-${_muslver}.tar.gz"
         "git://midipix.org/mmglue")
@@ -49,15 +59,23 @@ build() {
       -p "../musl-${_muslver}" \
       -f "${pkgdir}/usr/${_target}"
 
-  ./lazy -x build -e libc_no_complex
+  if [ -n "$MIDIPIX_MUSL_STAGE1" ]; then
+    ./lazy -x build -e libc_no_complex
+  else
+    ./lazy -x build -e libc
+  fi
 }
 
 package() {
   cd "${srcdir}/build"
 
-  # Note: Thelibraries seem to get re-linked during this time because
-  # install_no_complex.
-  ./lazy -x build -e install_no_complex
+  # Note: The libraries seem to get re-linked during this time, which
+  # is annoying.
+  if [ -n "$MIDIPIX_MUSL_STAGE1" ]; then
+    ./lazy -x build -e install_no_complex
+  else
+    ./lazy -x build -e install
+  fi
 
   # Because lazy doesn't support DESTDIR or equivalent, our build directory gets
   # baked into musl-gcc.specs.
