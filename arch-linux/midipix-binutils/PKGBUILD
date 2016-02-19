@@ -42,6 +42,7 @@ build() {
 
   ${srcdir}/binutils-${pkgver}/configure \
     --prefix=/usr \
+    --with-sysroot="/usr/$_target" \
     --target=${_target} \
     --disable-werror
 
