@@ -6,16 +6,24 @@
 _target=x86_64-nt64-midipix
 _gccver=4.6.4
 
-if [ -n "$MIDIPIX_GCC_STAGE1" ]; then
+if [ "$MIDIPIX_GCC_STAGE" -eq 1 ]; then
+  # Stage 1: just a compiler
   pkgname=$_target-gcc-stage1-git
   provides=($_target-gcc-stage1)
   depends=(zlib libmpc $_target-binutils)
   makedepends=(mpfr)
+elif [ "$MIDIPIX_GCC_STAGE" -eq 2 ]; then
+  # Stage 2: compiler and libgcc
+  pkgname=$_target-gcc-stage2-git
+  provides=($_target-gcc-stage2 $_target-gcc-stage1)
+  depends=(zlib libmpc $_target-binutils $_target-musl-stage1)
+  makedepends=(mpfr)
 else
+  MIDIPIX_GCC_STAGE=9
   pkgname=$_target-gcc-git
-  provides=($_target-gcc $_target-gcc-stage1)
-  replaces=($_target-gcc-stage1)
-  conflicts=($_target-gcc-stage1)  # TODO: add a conflict with the -git package?
+  provides=($_target-gcc $_target-gcc-stage{1,2})
+  replaces=($_target-gcc-stage{1,2})
+  conflicts=($_target-gcc-stage{1,2})  # TODO: add a conflict with the -git package?
   depends=(zlib libmpc $_target-binutils $_target-libc)
   makedepends=(mpfr)
 fi
@@ -68,11 +76,16 @@ build() {
   export cbb_cflags_for_stage3="$CFLAGS_FOR_BUILD"
   export cbb_cflags_for_stage4="$CFLAGS_FOR_BUILD"
 
-  # TOOD: maybe use these options for non-stage1
-  # Can't use them for stage1 because GCC complains about
-  # them not existing yet.
-  # --with-sysroot=/usr/${_target} \
-  # --with-native-system-header-dir=/include \
+  MORE_CFG=""
+
+  # Can't use these options for stage1 because GCC complains about the include
+  # directories not existing yet.
+  # TODO: try $(inhibit_gcc) instead
+  if [ "$MIDIPIX_GCC_STAGE" -ge 1 ]; then
+      echo hi
+      # MORE_CFG+=" --with-sysroot=/usr/${_target}"
+      # MORE_CFG+=" --with-native-system-header-dir=/include"
+  fi
 
   ../cbb-gcc-${_gccver}/configure \
     --target=${_target} \
@@ -103,16 +116,27 @@ build() {
     --enable-languages=c,c++,objc,lto \
     --enable-secureplt \
     --enable-debug \
-    --disable-bootstrap
+    --disable-bootstrap \
+    $MORE_CFG
   touch configure.skip
 
+  echo "---- all-gcc"
   make all-gcc
+
+  if [ "$MIDIPIX_GCC_STAGE" -ge 1 ]; then
+    echo "---- all-target-libgcc"
+    make all-target-libgcc
+  fi
 }
 
 package() {
   cd "${srcdir}/build"
 
   make DESTDIR=${pkgdir} install-gcc
+
+  if [ "$MIDIPIX_GCC_STAGE" -ge 1 ]; then
+    make install-target-libgcc
+  fi
 
   # Remove files that could conflict with host GCC.
   rm -r "${pkgdir}/usr/share/info"
