@@ -6,6 +6,10 @@
 _target=x86_64-nt64-midipix
 _gccver=4.6.4
 
+if [ -z "$MIDIPIX_GCC_STAGE" ]; then
+  MIDIPIX_GCC_STAGE=9
+fi
+
 if [ "$MIDIPIX_GCC_STAGE" -eq 1 ]; then
   # Stage 1: just a compiler
   pkgname=$_target-gcc-stage1-git
@@ -16,10 +20,9 @@ elif [ "$MIDIPIX_GCC_STAGE" -eq 2 ]; then
   # Stage 2: compiler and libgcc
   pkgname=$_target-gcc-stage2-git
   provides=($_target-gcc-stage2 $_target-gcc-stage1)
-  depends=(zlib libmpc $_target-binutils $_target-musl-stage1)
+  depends=(zlib libmpc $_target-binutils $_target-musl-stage1 $_target-psxstub)
   makedepends=(mpfr)
 else
-  MIDIPIX_GCC_STAGE=9
   pkgname=$_target-gcc-git
   provides=($_target-gcc $_target-gcc-stage{1,2})
   replaces=($_target-gcc-stage{1,2})
@@ -135,7 +138,7 @@ package() {
   make DESTDIR=${pkgdir} install-gcc
 
   if [ "$MIDIPIX_GCC_STAGE" -ge 1 ]; then
-    make install-target-libgcc
+    make DESTDIR=${pkgdir} install-target-libgcc
   fi
 
   # Remove files that could conflict with host GCC.
