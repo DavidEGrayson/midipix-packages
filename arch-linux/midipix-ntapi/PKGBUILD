@@ -36,5 +36,6 @@ package() {
   cd "${srcdir}/build-$_target"
   make DESTDIR="${pkgdir}/usr/${_target}" install
 
+  cd "${srcdir}/ntapi"
   install -Dm644 COPYING.NTAPI "${pkgdir}/usr/$_target/share/licenses/ntapi/COPYING.NTAPI"
 }

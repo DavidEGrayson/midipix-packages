@@ -36,5 +36,6 @@ package() {
   cd "${srcdir}/build-$_target"
   make DESTDIR="${pkgdir}/usr/${_target}" install
 
+  cd "${srcdir}/pemagine"
   install -Dm644 COPYING.PEMAGINE "${pkgdir}/usr/$_target/share/licenses/ntapi/COPYING.PEMAGINE"
 }
