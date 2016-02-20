@@ -8,7 +8,11 @@ _target=x86_64-nt64-midipix
 _arch=nt64
 _muslver=1.1.12
 
-if [ -n "$MIDIPIX_MUSL_STAGE1" ]; then
+if [ -z "$PKG_STAGE" ]; then
+  PKG_STAGE=9
+fi
+
+if [ "$PKG_STAGE" -eq 1 ]; then
   pkgname=$_target-musl-stage1-git
   provides=($_target-musl-stage1)
   conflicts=()
@@ -60,7 +64,7 @@ build() {
       -p "../musl-${_muslver}" \
       -f "/usr/${_target}"
 
-  if [ -n "$MIDIPIX_MUSL_STAGE1" ]; then
+  if [ "$PKG_STAGE" -eq 1 ]; then
     ./lazy -x build -e libc_no_complex
   else
     ./lazy -x build -e all
@@ -72,7 +76,7 @@ package() {
 
   # Note: The libraries seem to get re-linked during this time, which
   # is annoying.
-  if [ -n "$MIDIPIX_MUSL_STAGE1" ]; then
+  if [ "$PKG_STAGE" -eq 1 ]; then
     DESTDIR="${pkgdir}" ./lazy -x build -e install_no_complex
   else
     DESTDIR="${pkgdir}" ./lazy -x build -e install

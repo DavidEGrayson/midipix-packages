@@ -6,17 +6,17 @@
 _target=x86_64-nt64-midipix
 _gccver=4.6.4
 
-if [ -z "$MIDIPIX_GCC_STAGE" ]; then
-  MIDIPIX_GCC_STAGE=9
+if [ -z "$PKG_STAGE" ]; then
+  PKG_STAGE=9
 fi
 
-if [ "$MIDIPIX_GCC_STAGE" -eq 1 ]; then
+if [ "$PKG_STAGE" -eq 1 ]; then
   # Stage 1: just a compiler
   pkgname=$_target-gcc-stage1-git
   provides=($_target-gcc-stage1)
   depends=(zlib libmpc $_target-binutils)
   makedepends=(mpfr)
-elif [ "$MIDIPIX_GCC_STAGE" -eq 2 ]; then
+elif [ "$PKG_STAGE" -eq 2 ]; then
   # Stage 2: compiler and libgcc
   pkgname=$_target-gcc-stage2-git
   provides=($_target-gcc-stage2 $_target-gcc-stage1)
@@ -48,7 +48,7 @@ pkgver() {
 prepare() {
   cd "${srcdir}/cbb-gcc-${_gccver}"
 
-  if [ "$MIDIPIX_GCC_STAGE" -ge 2 ]; then
+  if [ "$PKG_STAGE" -ge 2 ]; then
       # Set the NATIVE_SYSTEM_HEADER_DIR in the Makefile to /include, because
       # configure.ac decides to append this to $(TARGET_SYSTEM_ROOT) in order to
       # set $(CROSS_SYSTEM_HEADER_DIR).  By default it is /usr/include, which is
@@ -100,7 +100,7 @@ build() {
   # Can't use these options for stage1 because GCC complains about the include
   # directories not existing yet.
   # TODO: try to get $(inhibit_libc) set as well
-  if [ "$MIDIPIX_GCC_STAGE" -ge 9 ]; then
+  if [ "$PKG_STAGE" -ge 9 ]; then
       MORE_CFG+=" --with-sysroot=/usr/${_target}"
 
       # We can use this in GCC 5:
@@ -143,12 +143,12 @@ build() {
   echo "---- all-gcc"
   make all-gcc
 
-  if [ "$MIDIPIX_GCC_STAGE" -ge 1 ]; then
+  if [ "$PKG_STAGE" -ge 1 ]; then
     echo "---- all-target-libgcc"
     make all-target-libgcc
   fi
 
-  if "$MIDIPIX_GCC_STAGE" -ge 9 ]; then
+  if "$PKG_STAGE" -ge 9 ]; then
     echo "---- all"
     make
   fi
@@ -159,11 +159,11 @@ package() {
 
   make DESTDIR="$pkgdir" install-gcc
 
-  if [ "$MIDIPIX_GCC_STAGE" -ge 1 ]; then
+  if [ "$PKG_STAGE" -ge 1 ]; then
     make DESTDIR="$pkgdir" install-target-libgcc
   fi
 
-  if "$MIDIPIX_GCC_STAGE" -ge 9 ]; then
+  if "$PKG_STAGE" -ge 9 ]; then
     make DESTDIR="$pkgdir" install
   fi
 
