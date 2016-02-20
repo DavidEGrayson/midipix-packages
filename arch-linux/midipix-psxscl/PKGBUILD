@@ -6,6 +6,8 @@
 _target=x86_64-nt64-midipix
 
 pkgname=$_target-psxscl
+provides=($_target-psxstub)
+conflicts=($_target-psxstub)
 pkgver=r157.4ca5bf5
 pkgrel=1
 pkgdesc="A thread-safe system call layer library"
