@@ -9,8 +9,8 @@ pkgdesc="Windows NT native API core library"
 arch=('any')
 url="http://git.midipix.org/$midipix_internal/dalist"
 license=('GPL2' 'GPL3')
-makedepends=($_target-gcc)
-options=(!strip)
+makedepends=($_target-gcc $_target-psxtypes)
+options=(!strip staticlibs)
 source=("git://midipix.org/$midipix_internal/dalist")
 sha256sums=('SKIP')
 
@@ -30,6 +30,7 @@ build() {
   export LDFLAGS=""
 
   ../dalist/configure --debug --host="$_target"
+  make
 }
 
 package() {
@@ -37,5 +38,5 @@ package() {
   make DESTDIR="${pkgdir}/usr/${_target}" install
 
   cd "${srcdir}/dalist"
-  install -Dm644 COPYING.DALIST "${pkgdir}/usr/$_target/share/licenses/dalist/COPYING.DALIST"
+  install -Dm644 COPYING.DALIST "${pkgdir}/usr/${_target}/share/licenses/dalist/COPYING.DALIST"
 }

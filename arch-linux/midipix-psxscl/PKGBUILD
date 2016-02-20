@@ -1,5 +1,8 @@
 # Maintainer: David Grayson <davidegrayson@gmail.com>
 
+# TODO: consider linking to ntapi, pemagine, and dalist dynamically
+# we can update them without having to rebuild psxscl.
+
 _target=x86_64-nt64-midipix
 
 pkgname=$_target-psxscl

@@ -10,7 +10,7 @@ arch=('any')
 url="http://git.midipix.org/$midipix_internal/ntapi"
 license=('GPL2' 'GPL3')
 makedepends=($_target-gcc)
-options=(!strip)
+options=(!strip staticlibs)
 source=("git://midipix.org/$midipix_internal/ntapi")
 sha256sums=('SKIP')
 
@@ -30,6 +30,7 @@ build() {
   export LDFLAGS=""
 
   ../ntapi/configure --debug --host="$_target"
+  make
 }
 
 package() {
