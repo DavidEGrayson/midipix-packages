@@ -63,7 +63,7 @@ build() {
   if [ -n "$MIDIPIX_MUSL_STAGE1" ]; then
     ./lazy -x build -e libc_no_complex
   else
-    ./lazy -x build -e libc
+    ./lazy -x build -e all
   fi
 }
 
@@ -78,7 +78,6 @@ package() {
     DESTDIR="${pkgdir}" ./lazy -x build -e install
   fi
 
-  # Because lazy doesn't support DESTDIR or equivalent, our build directory gets
-  # baked into musl-gcc.specs.
-  sed -i -e "s|${pkgdir}||g" "${pkgdir}/usr/${_target}/lib/musl-gcc.specs"
+  cd "${srcdir}/musl-${_muslver}"
+  install -D COPYRIGHT "${pkgdir}/usr/$_target/share/licenses/musl/COPYRIGHT"
 }
