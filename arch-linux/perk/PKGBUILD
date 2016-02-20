@@ -1,0 +1,33 @@
+# Maintainer: David Grayson <davidegrayson@gmail.com>
+
+pkgname=perk
+pkgver=r148.dfa96be
+pkgrel=1
+pkgdesc="PE (Portale Executable) resource kit"
+arch=('i686' 'x86_64')
+url="http://git.midipix.org/cgit.cgi/perk"
+license=('GPL2' 'GPL3')
+source=("git://midipix.org/perk")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "${srcdir}/perk"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  rm -rf "${srcdir}/build-$CARCH"
+  mkdir "${srcdir}/build-$CARCH"
+  cd "${srcdir}/build-$CARCH"
+
+  ../perk/configure --prefix=/usr
+  make
+}
+
+package() {
+  cd "${srcdir}/build-$CARCH"
+  make DESTDIR="${pkgdir}" install
+
+  cd "${srcdir}/perk"
+  install -Dm644 COPYING.PERK "${pkgdir}/usr/share/licenses/perk/COPYING.PERK"
+}
