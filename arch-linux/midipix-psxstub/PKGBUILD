@@ -21,14 +21,14 @@ pkgver() {
 }
 
 build() {
-  rm -rf "${srcdir}/build"
-  mkdir "${srcdir}/build"
-  cd "${srcdir}/build"
+  rm -rf "${srcdir}/build-$_target"
+  mkdir "${srcdir}/build-$_target"
+  cd "${srcdir}/build-$_target"
   cp ../psxstub/stub.S ../psxstub/Makefile .
   make TARGET="$_target"
 }
 
 package() {
-  cd "${srcdir}/build"
+  cd "${srcdir}/build-$_target"
   make TARGET="$_target" DESTDIR="${pkgdir}/usr/${_target}" install
 }
