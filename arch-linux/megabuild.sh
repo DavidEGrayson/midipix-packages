@@ -13,6 +13,7 @@
 # 10) midipix-dalist
 # 11) midipix-pemagine
 # 12) midipix-ntapi
-# 13) midipix-ntcon
-# 14) midipix-ntctty
-# 15) midipix-psxscl
+# 13) midipix-psxscl
+# 14) midipix-ntcon
+# 15) midipix-ntctty
+
