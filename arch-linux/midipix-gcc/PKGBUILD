@@ -29,7 +29,7 @@ else
   provides=($_target-gcc $_target-gcc-stage{1,2})
   replaces=($_target-gcc-stage{1,2}{,-git})
   conflicts=($_target-gcc-stage{1,2}{,-git})
-  depends=(zlib libmpc $_target-binutils $_target-libc)
+  depends=(zlib libmpc $_target-binutils $_target-musl)
   makedepends=(mpfr)
 fi
 pkgver=4.6.4.r58.53d53a0
@@ -133,15 +133,24 @@ build() {
     echo "---- all-target-libgcc"
     make all-target-libgcc
   fi
+
+  if "$MIDIPIX_GCC_STAGE" -ge 9 ]; then
+    echo "---- all"
+    make
+  fi
 }
 
 package() {
   cd "${srcdir}/build"
 
-  make DESTDIR=${pkgdir} install-gcc
+  make DESTDIR="$pkgdir" install-gcc
 
   if [ "$MIDIPIX_GCC_STAGE" -ge 1 ]; then
-    make DESTDIR=${pkgdir} install-target-libgcc
+    make DESTDIR="$pkgdir" install-target-libgcc
+  fi
+
+  if "$MIDIPIX_GCC_STAGE" -ge 9 ]; then
+    make DESTDIR="$pkgdir" install
   fi
 
   # Remove files that could conflict with host GCC.
