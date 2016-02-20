@@ -21,7 +21,7 @@
 # 12) midipix-ntapi
 # 13) midipix-psxscl
 #
-# Utilities:
+# More stuffs:
 # 14) midipix-ntcon
 # 15) midipix-ntctty
 # 16) perk
