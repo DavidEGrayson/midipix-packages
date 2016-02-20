@@ -29,9 +29,11 @@ url="http://www.musl-libc.org/"
 license=('TODO')
 options=(!strip)
 source=("http://www.musl-libc.org/releases/musl-${_muslver}.tar.gz"
-        "git://midipix.org/mmglue")
+        "git://midipix.org/mmglue"
+        "01-destdir.patch")
 sha256sums=('720b83c7e276b4b679c0bffe9509340d5f81fd601508e607e708177df0d31c0e'
-            'SKIP')
+            'SKIP'
+            'ef36c96ee7c88a46eb994974b96fdb488f1df1cecaea021e96145bd00fb9b7f3')
 
 pkgver() {
   cd "${srcdir}/mmglue"
@@ -41,6 +43,7 @@ pkgver() {
 prepare() {
   cd "${srcdir}/musl-${_muslver}"
   cp -R ../mmglue/* .
+  patch -p1 -i ../01-destdir.patch
 }
 
 build() {
@@ -57,7 +60,7 @@ build() {
       -c gcc \
       -n musl \
       -p "../musl-${_muslver}" \
-      -f "${pkgdir}/usr/${_target}"
+      -f "/usr/${_target}"
 
   if [ -n "$MIDIPIX_MUSL_STAGE1" ]; then
     ./lazy -x build -e libc_no_complex
@@ -72,9 +75,9 @@ package() {
   # Note: The libraries seem to get re-linked during this time, which
   # is annoying.
   if [ -n "$MIDIPIX_MUSL_STAGE1" ]; then
-    ./lazy -x build -e install_no_complex
+    DESTDIR="${pkgdir}" ./lazy -x build -e install_no_complex
   else
-    ./lazy -x build -e install
+    DESTDIR="${pkgdir}" ./lazy -x build -e install
   fi
 
   # Because lazy doesn't support DESTDIR or equivalent, our build directory gets

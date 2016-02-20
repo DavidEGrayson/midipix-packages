@@ -1,0 +1,69 @@
+diff --git a/musl.lzy b/musl.lzy
+index 4f42b77..557735b 100644
+--- a/musl.lzy
++++ b/musl.lzy
+@@ -295,7 +295,7 @@ musl_install_crt()
+ 
+ 	for lzp_crt_file in $musl_crt_files; do
+ 		lzp_crt_obj_file=`basename $lzp_crt_file`
+-		$musl_install_sh -D $lzp_crt_obj_file $lz_libdir/$lzp_crt_obj_file
++		$musl_install_sh -D $lzp_crt_obj_file $DESTDIR$lz_libdir/$lzp_crt_obj_file
+ 	done
+ 
+ 	lz_popd
+@@ -307,14 +307,14 @@ musl_install_libs()
+ 	lz_pushd $lz_build_dir/lib
+ 
+ 	for lzp_lib_file in "c" $musl_empty_lib_names; do
+-		$musl_install_sh -D -m 644 lib$lzp_lib_file$lz_stlib_ext $lz_libdir/lib$lzp_lib_file$lz_stlib_ext
++		$musl_install_sh -D -m 644 lib$lzp_lib_file$lz_stlib_ext $DESTDIR$lz_libdir/lib$lzp_lib_file$lz_stlib_ext
+ 	done
+ 
+-	$musl_install_sh -D -m 755 libc$lz_dylib_ext $lz_libdir/libc$lz_dylib_ext
++	$musl_install_sh -D -m 755 libc$lz_dylib_ext $DESTDIR$lz_libdir/libc$lz_dylib_ext
+ 
+ 	if [ "$lz_pecoff_winnt"x = yesx ]; then
+ 		# also install the import library
+-		$musl_install_sh -D -m 644 libc$lz_implib_ext  $lz_libdir/libc$lz_implib_ext
++		$musl_install_sh -D -m 644 libc$lz_implib_ext $DESTDIR$lz_libdir/libc$lz_implib_ext
+ 	fi
+ 
+ 	lz_popd
+@@ -323,8 +323,8 @@ musl_install_libs()
+ 
+ musl_install_ldso()
+ {
+-	$musl_install_sh -D -l $lz_libdir/libc$lz_dylib_ext $musl_ldso
+-	$musl_install_sh -D -l $lz_libdir/libc$lz_dylib_ext $lz_bindir/ldd
++	$musl_install_sh -D -l $lz_libdir/libc$lz_dylib_ext $DESTDIR$musl_ldso
++	$musl_install_sh -D -l $lz_libdir/libc$lz_dylib_ext $DESTDIR$lz_bindir/ldd
+ }
+ 
+ 
+@@ -335,7 +335,7 @@ musl_install_headers()
+ 	musl_include_files=`find . -type f`
+ 
+ 	for lzp_include_file in $musl_include_files; do
+-		$musl_install_sh -D -m 644 $lzp_include_file $lz_includedir/$lzp_include_file
++		$musl_install_sh -D -m 644 $lzp_include_file $DESTDIR$lz_includedir/$lzp_include_file
+ 	done
+ 
+ 	lz_popd
+@@ -349,7 +349,7 @@ musl_install_arch_headers()
+ 	musl_include_files=`find ./bits -type f ! -name *.h.in`
+ 
+ 	for lzp_include_file in $musl_include_files; do
+-		$musl_install_sh -D -m 644 $lzp_include_file $lz_includedir/$lzp_include_file
++		$musl_install_sh -D -m 644 $lzp_include_file $DESTDIR$lz_includedir/$lzp_include_file
+ 	done
+ 
+ 	lz_popd
+@@ -362,7 +362,7 @@ musl_install_specs()
+ 			$(readlink -f "$lz_includedir") \
+ 			$(readlink -f "$lz_libdir") \
+ 			$(readlink -f "$musl_ldso") \
+-		> $lz_libdir/musl-gcc.specs
++		> $DESTDIR$lz_libdir/musl-gcc.specs
+ }
+ 
+ 
