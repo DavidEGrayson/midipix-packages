@@ -11,13 +11,11 @@ _muslver=1.1.12
 if [ -n "$MIDIPIX_MUSL_STAGE1" ]; then
   pkgname=$_target-musl-stage1-git
   provides=($_target-musl-stage1)
-  replaces=()
   conflicts=()
   makedepends=($_target-gcc-stage1 lazy)
 else
   pkgname=$_target-musl-git
   provides=($_target-musl $_target-musl-stage1)
-  replaces=($_target-musl-stage1{,-git})
   conflicts=($_target-musl-stage1{,-git})
   makedepends=($_target-gcc-stage2 lazy)
 fi
