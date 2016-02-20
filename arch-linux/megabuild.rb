@@ -27,6 +27,7 @@
 # 16) perk
 
 require 'optparse'
+require 'pathname'
 
 def packages_in_order(hosts)
   packages = [
@@ -63,15 +64,58 @@ end
 
 def show_status(hosts)
   packages = packages_in_order(hosts)
-  puts "Package status:"
+  puts "Dependency status:"
   packages.each do |package|
-    installed = dependency_satisfied?(package)
-    puts "%-40s %s" % [package, installed ? "installed" : "not installed"]
+    satisfied = dependency_satisfied?(package)
+    puts "%-40s %s" % [package, satisfied ? "satisfied" : "not satisfied"]
   end
 end
 
 def purge(hosts)
+  raise 'not implemented'
+end
+
+def select_build_params(hosts, name)
+  params = {}
+  params[:env] = {}
+
+  hosts.each do |host|
+    prefix = "#{host}-"
+    name.sub!(prefix, 'midipix-')
+  end
+
+  if md = name.match(/-stage(\d+)$/)
+    params[:env]['MIDIPIX_STAGE'] = md[1]
+    name.sub!(md[0], '')
+  end
+
+  dir = SrcDir + name
+  if !dir.directory?
+    raise "PKGBUILD directory not present: #{dir}"
+  end
+
+  params[:dir] = dir
+
+  params
+end
+
+def build_and_install_dependency(hosts, package)
+  puts `date`.chomp + ": Time to build #{package}"
+
+  build_params = select_build_params(hosts, package)
+  p build_params
+end
+
+def megabuild(hosts)
   packages = packages_in_order(hosts)
+  packages.each do |package|
+    satisfied = dependency_satisfied?(package)
+    if satisfied
+      puts "Already satisfied: #{package}"
+    else
+      build_and_install_dependency(hosts, package)
+    end
+  end
 end
 
 def parse_args
@@ -83,6 +127,9 @@ def parse_args
     end
     opts.on("--purge", "Uninstall/remove all packages") do |v|
       options[:purge] = v
+    end
+    opts.on("--build", "Build packages") do |v|
+      options[:build] = v
     end
   end
   option_parser.parse!(ARGV)
@@ -100,6 +147,13 @@ def run
   if options[:purge]
     purge(hosts)
   end
+
+  if options[:build]
+    megabuild(hosts)
+  end
 end
+
+SrcDir = Pathname(__FILE__).parent
+BuildDir = Pathname(Dir.pwd)
 
 run
