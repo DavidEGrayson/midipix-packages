@@ -6,7 +6,7 @@ pkgrel=1
 pkgdesc="PE (Portale Executable) resource kit"
 arch=('i686' 'x86_64')
 url="http://git.midipix.org/cgit.cgi/perk"
-license=('GPL2' 'GPL3')
+license=('MIT')
 source=("git://midipix.org/perk")
 sha256sums=('SKIP')
 
