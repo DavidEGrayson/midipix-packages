@@ -1,0 +1,35 @@
+# Maintainer: David Grayson <davidegrayson@gmail.com>
+
+_target=x86_64-nt64-midipix
+
+pkgname=$_target-ntapi
+pkgver=r40.3d5fe99
+pkgrel=1
+pkgdesc=""
+arch=('any')
+url="http://git.midipix.org/$midipix_internal/ntapi"
+license=('GPLv2' 'GPLv3')
+makedepends=($_target-gcc)
+options=(!strip)
+source=("git://midipix.org/$midipix_internal/ntapi")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "${srcdir}/ntapi"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  # Override Arch Linux compile flags (which are not recognized
+  # by our toolchain) with our own.
+  export CFLAGS="-g3 -O0"  # easy debugging for now
+  export LDFLAGS=""
+
+  cd "${srcdir}/ntapi"
+  ../ntapi/configure --debug --host="$_target"
+}
+
+package() {
+  cd "${srcdir}/ntapi"
+  make DESTDIR="${pkgdir}/usr/${_target}" install
+}
