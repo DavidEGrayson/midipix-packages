@@ -1,0 +1,41 @@
+# Maintainer: David Grayson <davidegrayson@gmail.com>
+
+_target=x86_64-nt64-midipix
+
+pkgname=$_target-dalist
+pkgver=r23.bb4eb7e
+pkgrel=1
+pkgdesc="Windows NT native API core library"
+arch=('any')
+url="http://git.midipix.org/$midipix_internal/dalist"
+license=('GPL2' 'GPL3')
+makedepends=($_target-gcc)
+options=(!strip)
+source=("git://midipix.org/$midipix_internal/dalist")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "${srcdir}/dalist"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  rm -rf "${srcdir}/build-$_target"
+  mkdir "${srcdir}/build-$_target"
+  cd "${srcdir}/build-$_target"
+
+  # Override Arch Linux compile flags (which are not recognized
+  # by our toolchain) with our own.
+  export CFLAGS="-g3 -O0"  # easy debugging for now
+  export LDFLAGS=""
+
+  ../dalist/configure --debug --host="$_target"
+}
+
+package() {
+  cd "${srcdir}/build-$_target"
+  make DESTDIR="${pkgdir}/usr/${_target}" install
+
+  cd "${srcdir}/dalist"
+  install -Dm644 COPYING.DALIST "${pkgdir}/usr/$_target/share/licenses/dalist/COPYING.DALIST"
+}
