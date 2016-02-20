@@ -9,8 +9,10 @@ pkgdesc="A shell-based build system for the digital humanities"
 arch=('any')
 url="http://git.midipix.org/cgit.cgi/lazy"
 license=('MIT')
-source=("git://midipix.org/lazy")
-sha256sums=('SKIP')
+source=("git://midipix.org/lazy"
+        'lazy-runner')
+sha256sums=('SKIP'
+            'SKIP')
 
 pkgver() {
   cd "${srcdir}/lazy"
@@ -23,5 +25,5 @@ package() {
   cp -r * "${pkgdir}/usr/share/lazy"
 
   mkdir -p "${pkgdir}/usr/bin"
-  cp ../../lazy-runner "${pkgdir}/usr/bin/lazy"
+  cp ../lazy-runner "${pkgdir}/usr/bin/lazy"
 }
