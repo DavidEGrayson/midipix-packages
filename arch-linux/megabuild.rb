@@ -85,7 +85,7 @@ def select_build_params(hosts, name)
   end
 
   if md = name.match(/-stage(\d+)$/)
-    params[:env]['MIDIPIX_STAGE'] = md[1]
+    params[:env]['PKG_STAGE'] = md[1]
     name.sub!(md[0], '')
   end
 
@@ -99,11 +99,48 @@ def select_build_params(hosts, name)
   params
 end
 
+def find_package_file(dir)
+  # Kind of hacky, but we just find the newest .pkg.xz file in the
+  # directory.  So this would not support building of packages in
+  # parallel.
+  package_file = Dir.glob(dir + '*.pkg.tar.xz').max_by { |a| File.ctime(a) }
+  raise "package file not found" if !package_file
+  package_file
+end
+
+def install_package(package_file)
+  cmd = "sudo pacman -U #{package_file}"
+  puts "Installing package with command: #{cmd}"
+  success = system(cmd)
+  if !success
+    raise "installation failed"
+  end
+end
+
+def build_package(build_params)
+  dir = build_params[:dir]
+  env = build_params[:env].dup
+
+  env['PKGDEST'] = (BuildDir + 'pkg').to_s
+  env['SRCDEST'] = (BuildDir + 'src').to_s
+  env['SRCPKGDEST'] = (BuildDir + 'srcpkg').to_s
+  env['LOGDEST'] = (BuildDir + 'log').to_s
+  env['BUILDDIR'] = (BuildDir + 'build').to_s
+
+  success = system(env, 'makepkg -f', chdir: dir.to_s)
+  if !success
+    raise "makepkg failed"
+  end
+
+  find_package_file(BuildDir + 'pkg')
+end
+
 def build_and_install_dependency(hosts, package)
   puts `date`.chomp + ": Time to build #{package}"
 
   build_params = select_build_params(hosts, package)
-  p build_params
+  package_file = build_package(build_params)
+  install_package(package_file)
 end
 
 def megabuild(hosts)
