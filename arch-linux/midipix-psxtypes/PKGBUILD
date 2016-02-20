@@ -3,13 +3,12 @@
 _target=x86_64-nt64-midipix
 
 pkgname=$_target-psxtypes
-conflicts=($_target-psxscl)
 pkgver=r6.4d71ed8
 pkgrel=1
 pkgdesc=""
 arch=('any')
 url="http://git.midipix.org/$midipix_internal/psxtypes"
-license=('unknown')
+license=('TODO')
 makedepends=()
 options=(!strip)
 source=("git://midipix.org/$midipix_internal/psxtypes")

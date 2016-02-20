@@ -3,7 +3,6 @@
 _target=x86_64-nt64-midipix
 
 pkgname=$_target-pemagine
-conflicts=($_target-psxscl)
 pkgver=r32.434ff49
 pkgrel=1
 pkgdesc=""
