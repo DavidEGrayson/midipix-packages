@@ -17,8 +17,8 @@ if [ -n "$MIDIPIX_MUSL_STAGE1" ]; then
 else
   pkgname=$_target-musl-git
   provides=($_target-musl $_target-musl-stage1)
-  replaces=($_target-musl-stage1)
-  conflicts=($_target-musl-stage1)
+  replaces=($_target-musl-stage1{,-git})
+  conflicts=($_target-musl-stage1{,-git})
   makedepends=($_target-gcc-stage2 lazy)
 fi
 pkgver=1.1.12.r48.e43f5af
