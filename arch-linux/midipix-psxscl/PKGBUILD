@@ -1,0 +1,42 @@
+# Maintainer: David Grayson <davidegrayson@gmail.com>
+
+_target=x86_64-nt64-midipix
+
+pkgname=$_target-psxscl
+pkgver=r157.4ca5bf5
+pkgrel=1
+pkgdesc="A thread-safe system call layer library"
+arch=('any')
+url="http://git.midipix.org/$midipix_internal/psxscl"
+license=('GPL2' 'GPL3')
+depends=()
+makedepends=($_target-gcc $_target-ntapi $_target-psxtypes $_target-pemagine $_target-dalist)
+options=(!strip)
+source=("git://midipix.org/$midipix_internal/psxscl")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "${srcdir}/psxscl"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  rm -rf "${srcdir}/build-$_target"
+  mkdir "${srcdir}/build-$_target"
+  cd "${srcdir}/build-$_target"
+
+  # Override Arch Linux compile flags (which are not recognized
+  # by our toolchain) with our own.
+  export CFLAGS="-g3 -O0"  # easy debugging for now
+  export LDFLAGS="-L/usr/$_target/lib/"
+
+  ../psxscl/configure --debug --host="$_target"
+}
+
+package() {
+  cd "${srcdir}/build-$_target"
+  make DESTDIR="${pkgdir}/usr/${_target}" install
+
+  cd "${srcdir}/psxscl"
+  install -Dm644 COPYING.PSXSCL "${pkgdir}/usr/$_target/share/licenses/psxscl/COPYING.PSXSCL"
+}
