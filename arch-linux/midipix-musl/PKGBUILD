@@ -79,5 +79,5 @@ package() {
   fi
 
   cd "${srcdir}/musl-${_muslver}"
-  install -D COPYRIGHT "${pkgdir}/usr/$_target/share/licenses/musl/COPYRIGHT"
+  install -Dm644 COPYRIGHT "${pkgdir}/usr/$_target/share/licenses/musl/COPYRIGHT"
 }
