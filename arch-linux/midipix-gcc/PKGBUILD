@@ -57,12 +57,26 @@ prepare() {
   # --with-native-system-header-dir.
   sed -i 's|NATIVE_SYSTEM_HEADER_DIR = /usr/include|NATIVE_SYSTEM_HEADER_DIR = /include|' gcc/Makefile.in
 
-  # Make the stmp-fixinc Makefile task not run.  If it runs, then in stage 1
-  # it will give a fatal error about /usr/x86_64-nt64-midipix/include being abset.
-  echo "STMP_FIXINC =" >> gcc/config/i386/t-midipix
+  # Make the stmp-fixinc Makefile task not run.  If it runs, then in stage 1 it
+  # will give a fatal error about /usr/x86_64-nt64-midipix/include being absent.
+  # In later stages, we actually need it to run because the install-mkheaders
+  # task copies GCC's own limits.h into gcc/include-fixed/, and that file
+  # expects to find syslimits.h in the same directory (which would copied from
+  # MUSL by stmp-fixinc).  We'd prefer to just entirely disable the fixincludes
+  # feature of GCC because MUSL's headers are probably good enough, but that
+  # looks hard so we leave it on.
+  if [ "$PKG_STAGE" -eq 1 ]; then
+      echo "STMP_FIXINC =" >> gcc/config/i386/t-midipix
 
-  # TODO: try to get $(inhibit_libc) set: maybe we can build libgcc
-  # in stage 1 if we do that.
+      # This will help disable the fixincludes feature in the future if
+      # we want to do that:
+      # echo "INSTALL_HEADERS =" >> gcc/config/i386/t-midipix
+  fi
+
+  # TODO: try to get $(inhibit_libc) set in stage 1: maybe we can build libgcc
+  # in stage 1 if we do that, and it will automatically stop waring
+  # us about /usr/x86_64-nt64-midipix/include not being present, so
+  # we can comment out the thing above.
   # see: src/cbb-gcc-4.6.4/gcc/config/avr/t-avr:TARGET_LIBGCC2_CFLAGS = -DDF=SF -Dinhibit_libc -mcall-prologues -Os
 }
 
