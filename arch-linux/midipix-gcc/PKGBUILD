@@ -60,6 +60,10 @@ prepare() {
   # Make the stmp-fixinc Makefile task not run.  If it runs, then in stage 1
   # it will give a fatal error about /usr/x86_64-nt64-midipix/include being abset.
   echo "STMP_FIXINC =" >> gcc/config/i386/t-midipix
+
+  # TODO: try to get $(inhibit_libc) set: maybe we can build libgcc
+  # in stage 1 if we do that.
+  # see: src/cbb-gcc-4.6.4/gcc/config/avr/t-avr:TARGET_LIBGCC2_CFLAGS = -DDF=SF -Dinhibit_libc -mcall-prologues -Os
 }
 
 build() {
@@ -97,21 +101,9 @@ build() {
   export cbb_cflags_for_stage3="$CFLAGS_FOR_BUILD"
   export cbb_cflags_for_stage4="$CFLAGS_FOR_BUILD"
 
-  MORE_CFG=""
-
-  MORE_CFG+=" --with-sysroot=/usr/${_target}"
-
-  # Can't use these options for stage1 because GCC complains about the include
-  # directories not existing yet.
-  # TODO: try to get $(inhibit_libc) set as well
-  if [ "$PKG_STAGE" -ge 9 ]; then
-    echo hi
-    # We can use this in GCC 5:
-    # MORE_CFG+=" --with-native-system-header-dir=/include"
-  fi
-
   ../cbb-gcc-${_gccver}/configure \
     --target=${_target} \
+    --with-sysroot="/usr/${_target}" \
     --prefix=/usr \
     --libexecdir=/usr/lib \
     --with-as=/usr/bin/${_target}-as \
@@ -139,8 +131,7 @@ build() {
     --enable-languages=c,c++,objc,lto \
     --enable-secureplt \
     --enable-debug \
-    --disable-bootstrap \
-    $MORE_CFG
+    --disable-bootstrap
   touch configure.skip
 
   echo "---- all-gcc"
