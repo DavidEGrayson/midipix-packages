@@ -49,8 +49,8 @@ def packages_in_order(hosts)
       "#{host}-pemagine",
       "#{host}-ntapi",
       "#{host}-psxscl",
-      "#{host}-ntcon",
-      "#{host}-ntctty",
+      # TODO: "#{host}-ntcon",
+      # TODO: "#{host}-ntctty",
     ]
   end
 
