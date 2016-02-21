@@ -28,6 +28,7 @@
 
 require 'optparse'
 require 'pathname'
+require 'fileutils'
 
 def packages_in_order(hosts)
   packages = [
@@ -55,6 +56,13 @@ def packages_in_order(hosts)
   end
 
   packages
+end
+
+def log(msg)
+  puts msg
+  File.open(BuildDir + 'build.log', 'a') do |f|
+    f.puts `date`.chomp + ": " + msg
+  end
 end
 
 def dependency_satisfied?(dep)
@@ -108,8 +116,9 @@ def find_package_file(dir)
   package_file
 end
 
-def install_package(package_file)
+def install_package(package_file, noconfirm)
   cmd = "sudo pacman -U #{package_file}"
+  cmd << " --noconfirm" if noconfirm
   puts "Installing package with command: #{cmd}"
   success = system(cmd)
   if !success
@@ -122,10 +131,10 @@ def build_package(build_params)
   env = build_params[:env].dup
 
   env['PKGDEST'] = (BuildDir + 'pkg').to_s
-  env['SRCDEST'] = (BuildDir + 'src').to_s
   env['SRCPKGDEST'] = (BuildDir + 'srcpkg').to_s
   env['LOGDEST'] = (BuildDir + 'log').to_s
   env['BUILDDIR'] = (BuildDir + 'build').to_s
+  env['SRCDEST'] = (BuildDir + 'build' + 'downloads').to_s
 
   success = system(env, 'makepkg -f', chdir: dir.to_s)
   if !success
@@ -135,24 +144,43 @@ def build_package(build_params)
   find_package_file(BuildDir + 'pkg')
 end
 
-def build_and_install_dependency(hosts, package)
-  puts `date`.chomp + ": Time to build #{package}"
+def build_and_install_dependency(hosts, package, options = {})
+  log "Time to build #{package}"
 
   build_params = select_build_params(hosts, package)
   package_file = build_package(build_params)
-  install_package(package_file)
+  install_package(package_file, options[:noconfirm])
 end
 
-def megabuild(hosts)
+def prepare_for_build(options)
+  puts "Preparing to build packages"
+  puts "PKGBUILD script directory: #{SrcDir}"
+  puts "Build directory: #{BuildDir}"
+
+  FileUtils.mkdir_p BuildDir + 'pkg'
+  FileUtils.mkdir_p BuildDir + 'build' + 'downloads'
+
+  if options[:noconfirm]
+    cmd = "sudo pacman -Q"
+    puts "Acquiring/checking sudo permissions by running '#{cmd}'"
+    `#{cmd}`
+    raise "Acquiring/checking sudo permissions failed." if !$?.success?
+  end
+end
+
+def megabuild(hosts, options)
+  log "Starting megabuild"
+  prepare_for_build(options)
   packages = packages_in_order(hosts)
   packages.each do |package|
     satisfied = dependency_satisfied?(package)
     if satisfied
-      puts "Already satisfied: #{package}"
+      log "Already satisfied: #{package}"
     else
-      build_and_install_dependency(hosts, package)
+      build_and_install_dependency(hosts, package, options)
     end
   end
+  log "Done"
 end
 
 def parse_args
@@ -168,6 +196,9 @@ def parse_args
     opts.on("--build", "Build packages") do |v|
       options[:build] = v
     end
+    opts.on("--noconfirm", "Bypass pacman prompts when installing packages.") do |v|
+      options[:noconfirm] = v
+    end
   end
   option_parser.parse!(ARGV)
   options
@@ -179,14 +210,18 @@ def run
 
   if options[:status]
     show_status(hosts)
+    did_something = true
   end
 
   if options[:purge]
     purge(hosts)
+    did_something = true
   end
 
+  options[:build] = true if !did_something
+
   if options[:build]
-    megabuild(hosts)
+    megabuild(hosts, options)
   end
 end
 
