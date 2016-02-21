@@ -1,0 +1,12 @@
+diff --git a/gcc/configure b/gcc/configure
+index 646c0c1..5a33efd 100755
+--- a/gcc/configure
++++ b/gcc/configure
+@@ -11394,6 +11394,7 @@ if { { test x$host != x$target && test "x$with_sysroot" = x && test "x$with_buil
+      { test "x$with_headers" = x || test "x$with_headers" = xno ; } ; then
+        inhibit_libc=true
+ fi
++inhibit_libc=true
+ 
+ 
+ # When building gcc with a cross-compiler, we need to adjust things so

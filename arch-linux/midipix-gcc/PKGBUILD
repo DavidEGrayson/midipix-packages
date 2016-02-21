@@ -36,8 +36,10 @@ pkgdesc="The GNU Compiler Collection - cross compiler for midipix 64-bit target"
 arch=('i686' 'x86_64')
 url="http://gcc.gnu.org/"
 license=('GPL' 'LGPL' 'FDL')
-source=("git://midipix.org/cbb/cbb-gcc-${_gccver}")
-sha256sums=('SKIP')
+source=("git://midipix.org/cbb/cbb-gcc-${_gccver}"
+        "01-inhibit-libc.patch")
+sha256sums=('SKIP'
+            '4190b2c40221d27fe3fabfb25801f3a2ba5beaae4633b1de97f57d3b29f2116f')
 options=(!strip)  # TODO: strip the native binaries though
 
 pkgver() {
@@ -66,7 +68,8 @@ prepare() {
   # feature of GCC because MUSL's headers are probably good enough, but that
   # looks hard so we leave it on.
   if [ "$PKG_STAGE" -eq 1 ]; then
-      echo "STMP_FIXINC =" >> gcc/config/i386/t-midipix
+      echo hi
+      # echo "STMP_FIXINC =" >> gcc/config/i386/t-midipix
 
       # This will help disable the fixincludes feature in the future if
       # we want to do that:
@@ -78,6 +81,8 @@ prepare() {
   # us about /usr/x86_64-nt64-midipix/include not being present, so
   # we can comment out the thing above.
   # see: src/cbb-gcc-4.6.4/gcc/config/avr/t-avr:TARGET_LIBGCC2_CFLAGS = -DDF=SF -Dinhibit_libc -mcall-prologues -Os
+
+  patch -p1 -i ../01-inhibit-libc.patch
 }
 
 build() {
@@ -115,9 +120,14 @@ build() {
   export cbb_cflags_for_stage3="$CFLAGS_FOR_BUILD"
   export cbb_cflags_for_stage4="$CFLAGS_FOR_BUILD"
 
+  #  MORE_CFG+="--with-headers=no"
+
+  #if [ "$PKG_STAGE" -ge 2 ]; then
+    MORE_CFG+="--with-sysroot=/usr/${_target}"
+  #fi
+
   ../cbb-gcc-${_gccver}/configure \
     --target=${_target} \
-    --with-sysroot="/usr/${_target}" \
     --prefix=/usr \
     --libexecdir=/usr/lib \
     --with-as=/usr/bin/${_target}-as \
@@ -145,13 +155,14 @@ build() {
     --enable-languages=c,c++,objc,lto \
     --enable-secureplt \
     --enable-debug \
-    --disable-bootstrap
+    --disable-bootstrap \
+    $MORE_CFG
   touch configure.skip
 
   echo "---- all-gcc"
   make all-gcc
 
-  if [ "$PKG_STAGE" -ge 2 ]; then
+  if [ "$PKG_STAGE" -ge 1 ]; then
     echo "---- all-target-libgcc"
     make all-target-libgcc
   fi
@@ -167,7 +178,7 @@ package() {
 
   make DESTDIR="$pkgdir" install-gcc
 
-  if [ "$PKG_STAGE" -ge 2 ]; then
+  if [ "$PKG_STAGE" -ge 1 ]; then
     make DESTDIR="$pkgdir" install-target-libgcc
   fi
 
