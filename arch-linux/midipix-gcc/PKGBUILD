@@ -48,16 +48,18 @@ pkgver() {
 prepare() {
   cd "${srcdir}/cbb-gcc-${_gccver}"
 
-  if [ "$PKG_STAGE" -ge 2 ]; then
-      # Set the NATIVE_SYSTEM_HEADER_DIR in the Makefile to /include, because
-      # configure.ac decides to append this to $(TARGET_SYSTEM_ROOT) in order to
-      # set $(CROSS_SYSTEM_HEADER_DIR).  By default it is /usr/include, which is
-      # wrong, because /usr/x86_64-nt64-midipix/usr/include is not where we want
-      # to store out headers.  The way that other Arch Linux compilers deal with
-      # this is that they use GCC 5 and use the new configure option
-      # --with-native-system-header-dir.
-      sed -i 's|NATIVE_SYSTEM_HEADER_DIR = /usr/include|NATIVE_SYSTEM_HEADER_DIR = /include|' gcc/Makefile.in
-  fi
+  # Set the NATIVE_SYSTEM_HEADER_DIR in the Makefile to /include, because
+  # configure.ac decides to append this to $(TARGET_SYSTEM_ROOT) in order to
+  # set $(CROSS_SYSTEM_HEADER_DIR).  By default it is /usr/include, which is
+  # wrong, because /usr/x86_64-nt64-midipix/usr/include is not where we want
+  # to store our headers.  The way that other Arch Linux compilers deal with
+  # this is that they use GCC 5 and use the new configure option
+  # --with-native-system-header-dir.
+  sed -i 's|NATIVE_SYSTEM_HEADER_DIR = /usr/include|NATIVE_SYSTEM_HEADER_DIR = /include|' gcc/Makefile.in
+
+  # Make the stmp-fixinc Makefile task not run.  If it runs, then in stage 1
+  # it will give a fatal error about /usr/x86_64-nt64-midipix/include being abset.
+  echo "STMP_FIXINC =" >> gcc/config/i386/t-midipix
 }
 
 build() {
@@ -97,14 +99,15 @@ build() {
 
   MORE_CFG=""
 
+  MORE_CFG+=" --with-sysroot=/usr/${_target}"
+
   # Can't use these options for stage1 because GCC complains about the include
   # directories not existing yet.
   # TODO: try to get $(inhibit_libc) set as well
   if [ "$PKG_STAGE" -ge 9 ]; then
-      MORE_CFG+=" --with-sysroot=/usr/${_target}"
-
-      # We can use this in GCC 5:
-      # MORE_CFG+=" --with-native-system-header-dir=/include"
+    echo hi
+    # We can use this in GCC 5:
+    # MORE_CFG+=" --with-native-system-header-dir=/include"
   fi
 
   ../cbb-gcc-${_gccver}/configure \
@@ -143,7 +146,7 @@ build() {
   echo "---- all-gcc"
   make all-gcc
 
-  if [ "$PKG_STAGE" -ge 1 ]; then
+  if [ "$PKG_STAGE" -ge 2 ]; then
     echo "---- all-target-libgcc"
     make all-target-libgcc
   fi
@@ -159,7 +162,7 @@ package() {
 
   make DESTDIR="$pkgdir" install-gcc
 
-  if [ "$PKG_STAGE" -ge 1 ]; then
+  if [ "$PKG_STAGE" -ge 2 ]; then
     make DESTDIR="$pkgdir" install-target-libgcc
   fi
 
