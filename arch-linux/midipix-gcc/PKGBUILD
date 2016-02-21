@@ -12,21 +12,21 @@ fi
 
 if [ "$PKG_STAGE" -eq 1 ]; then
   # Stage 1: just a compiler
-  pkgname=$_target-gcc-stage1-git
+  pkgname=$_target-gcc-stage1
   provides=($_target-gcc-stage1)
   depends=(zlib libmpc $_target-binutils)
   makedepends=(mpfr)
 elif [ "$PKG_STAGE" -eq 2 ]; then
   # Stage 2: compiler and libgcc
-  pkgname=$_target-gcc-stage2-git
+  pkgname=$_target-gcc-stage2
   provides=($_target-gcc-stage2 $_target-gcc-stage1)
-  conflicts=($_target-gcc-stage1{,-git})
+  conflicts=($_target-gcc-stage1)
   depends=(zlib libmpc $_target-binutils $_target-musl-stage1 $_target-psxstub)
   makedepends=(mpfr)
 else
-  pkgname=$_target-gcc-git
+  pkgname=$_target-gcc
   provides=($_target-gcc $_target-gcc-stage{1,2})
-  conflicts=($_target-gcc-stage{1,2}{,-git})
+  conflicts=($_target-gcc-stage{1,2})
   depends=(zlib libmpc $_target-binutils $_target-musl)
   makedepends=(mpfr)
 fi

@@ -13,14 +13,14 @@ if [ -z "$PKG_STAGE" ]; then
 fi
 
 if [ "$PKG_STAGE" -eq 1 ]; then
-  pkgname=$_target-musl-stage1-git
+  pkgname=$_target-musl-stage1
   provides=($_target-musl-stage1)
   conflicts=()
   makedepends=($_target-gcc-stage1 lazy)
 else
-  pkgname=$_target-musl-git
+  pkgname=$_target-musl
   provides=($_target-musl $_target-musl-stage1)
-  conflicts=($_target-musl-stage1{,-git})
+  conflicts=($_target-musl-stage1)
   makedepends=($_target-gcc-stage2 lazy)
 fi
 pkgver=1.1.12.r48.e43f5af

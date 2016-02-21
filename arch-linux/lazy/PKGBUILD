@@ -1,8 +1,6 @@
 # Maintainer: David Grayson <davidegrayson@gmail.com>
 
-pkgname=lazy-git
-provides=(lazy)
-conflicts=(lazy)
+pkgname=lazy
 pkgver=r12.04984a9
 pkgrel=1
 pkgdesc="A shell-based build system for the digital humanities"
