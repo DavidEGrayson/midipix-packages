@@ -170,7 +170,11 @@ def build_package(build_params)
   env['BUILDDIR'] = (BuildDir + 'build').to_s
   env['SRCDEST'] = (BuildDir + 'build' + 'downloads').to_s
 
-  success = system(env, 'makepkg -f', chdir: dir.to_s)
+  # --skippgpcheck: Skip checking PGP signatures because they would
+  # require the user to add the key in question to their gpg keyring,
+  # which makes it harder to just build a bunch of packages.
+
+  success = system(env, 'makepkg -f --skippgpcheck', chdir: dir.to_s)
   if !success
     raise "makepkg failed"
   end
