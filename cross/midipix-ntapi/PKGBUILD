@@ -23,7 +23,7 @@ build() {
   mkdir "${srcdir}/build-$CHOST"
   cd "${srcdir}/build-$CHOST"
 
-  ../ntapi/configure --debug --host="$CHOST"
+  ../ntapi/configure --host="$CHOST"
   make
 }
 
