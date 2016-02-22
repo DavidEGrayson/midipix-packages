@@ -18,7 +18,8 @@ time, I have provided a Ruby script called `megabuild.rb` that will
 automate the building and installation of the packages as much as
 possible.
 
-== How to use megabuild ==
+How to use megabuild
+====
 
 1. Install Ruby:
 
