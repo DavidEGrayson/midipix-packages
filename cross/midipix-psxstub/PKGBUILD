@@ -9,7 +9,6 @@ arch=('any')
 url="http://git.midipix.org/cgit.cgi/psxstub/"
 license=('unknown')  # psxstub has no license info
 makedepends=($CHOST-gcc-stage1)
-options=(!strip)
 source=("git://midipix.org/psxstub")
 sha256sums=('SKIP')
 

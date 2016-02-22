@@ -23,7 +23,6 @@ pkgdesc="C standard library implementation (musl) for midipix 64-bit target"
 arch=('any')
 url="http://www.musl-libc.org/"
 license=('MIT' 'unknown')  # mmglue has no license info
-options=(!strip)
 source=("http://www.musl-libc.org/releases/musl-${_muslver}.tar.gz"
         "git://midipix.org/mmglue"
         "01-destdir.patch")

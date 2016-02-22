@@ -11,7 +11,6 @@ url="http://git.midipix.org/$midipix_internal/psxscl"
 license=('GPL2' 'GPL3')
 depends=()
 makedepends=($CHOST-{gcc,ntapi,psxtypes,pemagine,dalist})
-options=(!strip)
 source=("git://midipix.org/$midipix_internal/psxscl")
 sha256sums=('SKIP')
 

@@ -8,7 +8,7 @@ arch=('any')
 url="http://git.midipix.org/$midipix_internal/pemagine"
 license=('GPL2' 'GPL3')
 makedepends=($CHOST-gcc $CHOST-psxtypes)
-options=(!strip staticlibs)
+options=(staticlibs)
 source=("git://midipix.org/$midipix_internal/pemagine")
 sha256sums=('SKIP')
 

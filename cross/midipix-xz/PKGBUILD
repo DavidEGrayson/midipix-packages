@@ -9,10 +9,9 @@ arch=('any')
 url='http://tukaani.org/xz'
 license=('GPL' 'LGPL' 'custom')
 depends=()
-makedepends=()
+makedepends=($CHOST-gcc)
 checkdepends=()
 optdepends=()
-options=(!strip)
 source=(
   "http://tukaani.org/xz/xz-${pkgver}.tar.gz"{,.sig}
   "http://git.midipix.org/cgit.cgi/ports/portage/plain/config.cache"

@@ -9,7 +9,7 @@ url="http://git.midipix.org/$midipix_internal/ntapi"
 license=('GPL2' 'GPL3')
 depends=($CHOST-dalist $CHOST-pemagine)
 makedepends=($CHOST-gcc $CHOST-dalist $CHOST-pemagine)
-options=(!strip staticlibs)
+options=(staticlibs)
 source=("git://midipix.org/$midipix_internal/ntapi")
 sha256sums=('SKIP')
 

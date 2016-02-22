@@ -9,7 +9,6 @@ url="http://git.midipix.org/$midipix_internal/ntctty"
 license=('MIT')
 depends=()
 makedepends=($CHOST-{gcc,psxtypes,dalist,pemagine,ntcon,ntapi})
-options=(!strip)
 source=("git://midipix.org/$midipix_internal/ntctty")
 sha256sums=('SKIP')
 

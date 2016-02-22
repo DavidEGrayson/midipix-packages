@@ -9,7 +9,7 @@ url="http://git.midipix.org/$midipix_internal/ntcon"
 license=('MIT')
 depends=($CHOST-pemagine)
 makedepends=($CHOST-gcc $CHOST-pemagine)
-options=(!strip staticlibs)
+options=(staticlibs)
 source=("git://midipix.org/$midipix_internal/ntcon")
 sha256sums=('SKIP')
 
