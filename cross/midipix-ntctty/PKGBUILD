@@ -1,0 +1,35 @@
+# Maintainer: David Grayson <davidegrayson@gmail.com>
+
+pkgname=$CHOST-ntctty
+pkgver=r53.9ab4322
+pkgrel=1
+pkgdesc="An extensible subsystem and pty server."
+arch=('any')
+url="http://git.midipix.org/$midipix_internal/ntctty"
+license=('MIT')
+depends=()
+makedepends=($CHOST-{gcc,psxtypes,dalist,pemagine,ntcon,ntapi})
+options=(!strip)
+source=("git://midipix.org/$midipix_internal/ntctty")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "${srcdir}/ntctty"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  rm -rf "${srcdir}/build-$CHOST"
+  mkdir "${srcdir}/build-$CHOST"
+  cd "${srcdir}/build-$CHOST"
+
+  ../ntctty/configure --host="$CHOST"
+}
+
+package() {
+  cd "${srcdir}/build-$CHOST"
+  make DESTDIR="${pkgdir}/usr/$CHOST" install
+
+  cd "${srcdir}/ntctty"
+  install -Dm644 COPYING.NTCTTY "${pkgdir}/usr/$CHOST/share/licenses/ntctty/COPYING.NTCTTY"
+}
