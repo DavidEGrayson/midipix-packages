@@ -156,9 +156,12 @@ build() {
     make all-target-libgcc
   fi
 
-  if "$PKG_STAGE" -ge 9 ]; then
+  if [ "$PKG_STAGE" -ge 9 ]; then
     echo "---- all"
     make
+    # TODO: make sure libstdc++ gets installed
+    #echo "---- all-target-libstdc++-v3"
+    #make all-target-libstdc++-v3
   fi
 }
 
@@ -171,8 +174,9 @@ package() {
     make DESTDIR="$pkgdir" install-target-libgcc
   fi
 
-  if "$PKG_STAGE" -ge 9 ]; then
+  if [ "$PKG_STAGE" -ge 9 ]; then
     make DESTDIR="$pkgdir" install
+    #make DESTDIR="$pkgdir" install-target-libstdc++-v3
   fi
 
   # Remove files that could conflict with host GCC.

@@ -54,6 +54,7 @@ def packages_in_order(hosts)
       "#{host}-ntcon",
       "#{host}-ntctty",
       "#{host}-xz",
+      "#{host}-ncurses",
     ]
   end
 
