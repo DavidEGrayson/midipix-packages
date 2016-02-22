@@ -1,0 +1,43 @@
+# Maintainer: David Grayson <davidegrayson@gmail.com>
+
+_host=x86_64-nt64-midipix
+pkgname=$_host-xz
+pkgver=5.2.2
+pkgrel=1
+pkgdesc='Library and command line tools for XZ and LZMA compressed files'
+arch=('any')
+url='https://tukaani.org/xz'
+license=('GPL' 'LGPL' 'custom')
+depends=()
+makedepends=()
+checkdepends=()
+optdepends=()
+source=(
+  "https://tukaani.org/${pkgname}/${pkgname}-${pkgver}.tar.gz"{,.sig}
+  "http://git.midipix.org/cgit.cgi/ports/portage/plain/config.cache"
+  midipix-config.patch)
+sha256sums=('73df4d5d34f0468bd57d09f2d8af363e95ed6cc3a4a86129d2f2c366259902a2'
+            'SKIP'
+            '1e8fa44f9da32cf7b33309ce9b60f42427b6c83a7e59aea8f4d577a8a805fc34'
+            '0750bd6bad458220945c81dc96b5513239508228e435a1417d6277227ab618fb')
+validpgpkeys=('3690C240CE51B4670D30AD1C38EE757D69184620')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  patch -p1 -i ../midipix-config.patch
+}
+
+build() {
+  rm -rf "build-${CHOST}"
+  mkdir "build-${CHOST}"
+  cd "${srcdir}/build-${CHOST}"
+  cp ../config.cache .
+  "../${pkgname}-${pkgver}/configure" -C \
+      --host="${CHOST}" --prefix=""
+  make
+}
+
+package() {
+  cd "${srcdir}/build-${CHOST}"
+  make DESTDIR="${pkgdir}/usr/${_host}" install
+}
