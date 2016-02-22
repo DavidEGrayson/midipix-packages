@@ -25,7 +25,7 @@ possible.
         pacman -S ruby
 2. Megabuild will place all of its build files in `$PWD/build`, `$PWD/build.log`, and `$PWD/pkg`, where `$PWD` is your current working directory.  So if you want those files to be somewhere special, you can change to that directory now.
 3. Check the status of your system by running:
-       ./megabuild.rb --status
+        ./megabuild.rb --status
 4. This basically shows a list of packages, in the order that
 Megabuild wants to build them, and tells you if they are installed or
 not.  Note that pacman packages have a cool feature where a package
@@ -38,7 +38,7 @@ So if the Megabuild status command tells you that the
 either there is a package with that name installed or there is another
 package that provides the same features.
 5. Start building packages:
-       ./megabuild.rb
+        ./megabuild.rb
 6. If you get tired of having to enter your sudo password and answer
 pacman prompts whener megabuild installs a package, then you can run:
-       ./megabuild.rb --noconfirm
+        ./megabuild.rb --noconfirm
