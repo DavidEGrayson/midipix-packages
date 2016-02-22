@@ -119,7 +119,11 @@ end
 
 def install_package(package_file, noconfirm)
   cmd = "sudo pacman -U #{package_file}"
-  cmd << " --noconfirm" if noconfirm
+  if noconfirm
+    # we can't use --noconfirm because it automatically answers no to the
+    # question about removing conflicting packages.
+    cmd = "yes | #{cmd}"
+  end
   puts "Installing package with command: #{cmd}"
   success = system(cmd)
   if !success
