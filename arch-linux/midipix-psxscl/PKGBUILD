@@ -33,7 +33,7 @@ build() {
   # Override Arch Linux compile flags (which are not recognized
   # by our toolchain) with our own.
   export CFLAGS="-g3 -O0"  # easy debugging for now
-  export LDFLAGS="-L/usr/$_target/lib/"
+  export LDFLAGS=""
 
   ../psxscl/configure --debug --host="$_target"
 }
