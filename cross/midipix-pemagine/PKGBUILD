@@ -1,0 +1,35 @@
+# Maintainer: David Grayson <davidegrayson@gmail.com>
+
+pkgname=$CHOST-pemagine
+pkgver=r32.434ff49
+pkgrel=1
+pkgdesc="A (virtual) tour into portable bits and executable bytes"
+arch=('any')
+url="http://git.midipix.org/$midipix_internal/pemagine"
+license=('GPL2' 'GPL3')
+makedepends=($CHOST-gcc $CHOST-psxtypes)
+options=(!strip staticlibs)
+source=("git://midipix.org/$midipix_internal/pemagine")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "${srcdir}/pemagine"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  rm -rf "${srcdir}/build-$CHOST"
+  mkdir "${srcdir}/build-$CHOST"
+  cd "${srcdir}/build-$CHOST"
+
+  ../pemagine/configure --host="$CHOST"
+  make
+}
+
+package() {
+  cd "${srcdir}/build-$CHOST"
+  make DESTDIR="${pkgdir}/usr/$CHOST" install
+
+  cd "${srcdir}/pemagine"
+  install -Dm644 COPYING.PEMAGINE "${pkgdir}/usr/$CHOST/share/licenses/pemagine/COPYING.PEMAGINE"
+}
