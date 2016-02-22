@@ -1,0 +1,36 @@
+# Maintainer: David Grayson <davidegrayson@gmail.com>
+
+pkgname=$CHOST-ntapi
+pkgver=r40.3d5fe99
+pkgrel=1
+pkgdesc="Windows NT native API core library"
+arch=('any')
+url="http://git.midipix.org/$midipix_internal/ntapi"
+license=('GPL2' 'GPL3')
+depends=($CHOST-dalist $CHOST-pemagine)
+makedepends=($CHOST-gcc $CHOST-dalist $CHOST-pemagine)
+options=(!strip staticlibs)
+source=("git://midipix.org/$midipix_internal/ntapi")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "${srcdir}/ntapi"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  rm -rf "${srcdir}/build-$CHOST"
+  mkdir "${srcdir}/build-$CHOST"
+  cd "${srcdir}/build-$CHOST"
+
+  ../ntapi/configure --debug --host="$CHOST"
+  make
+}
+
+package() {
+  cd "${srcdir}/build-$CHOST"
+  make DESTDIR="${pkgdir}/usr/${CHOST}" install
+
+  cd "${srcdir}/ntapi"
+  install -Dm644 COPYING.NTAPI "${pkgdir}/usr/$CHOST/share/licenses/ntapi/COPYING.NTAPI"
+}
