@@ -8,10 +8,10 @@ pkgrel=1
 pkgdesc="A thread-safe system call layer library"
 arch=('any')
 url="http://git.midipix.org/$midipix_internal/ntcon"
-license=('GPL2' 'GPL3')
-depends=()
+license=('MIT')
+depends=($_host-pemagine)
 makedepends=($_host-gcc $_host-pemagine)
-options=(!strip)
+options=(!strip staticlibs)
 source=("git://midipix.org/$midipix_internal/ntcon")
 sha256sums=('SKIP')
 
