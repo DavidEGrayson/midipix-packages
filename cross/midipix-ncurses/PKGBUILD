@@ -1,0 +1,43 @@
+# Maintainer: David Grayson <davidegrayson@gmail.com>
+
+_realname=ncurses
+pkgname=$CHOST-$_realname
+pkgver=6.0
+pkgrel=1
+pkgdesc='System V Release 4.0 curses emulation library.'
+arch=('any')
+url='http://invisible-island.net/ncurses/ncurses.html'
+license=('MIT')
+makedepends=($CHOST-gcc)
+source=("ftp://invisible-island.net/ncurses/ncurses-${pkgver/_/-}.tar.gz"{,.asc}
+        "http://git.midipix.org/cgit.cgi/ports/portage/plain/config.cache"
+        midipix-config.patch)
+sha256sums=('f551c24b30ce8bfb6e96d9f59b42fbea30fa3a6123384172f9e7284bcf647260'
+            'SKIP'
+            '1e8fa44f9da32cf7b33309ce9b60f42427b6c83a7e59aea8f4d577a8a805fc34'
+            '92004e4917f58a9590b2bfab81df589161665d702acbf30de5dbf4d15c9fcc68')
+validpgpkeys=('C52048C0C0748FEE227D47A2702353E0F7E48EDB')  # Thomas Dickey
+
+prepare() {
+  cd "${srcdir}/${_realname}-${pkgver/_/-}"
+  patch -p1 -i ../midipix-config.patch
+}
+
+build() {
+  rm -rf "build-$CHOST"
+  mkdir "build-$CHOST"
+  cd "${srcdir}/build-$CHOST"
+  cp ../config.cache .
+  "../${_realname}-${pkgver/_/-}/configure" -C \
+      --host="$CHOST" --prefix=""
+  make
+}
+
+package() {
+  cd "${srcdir}/build-${CHOST}"
+  make DESTDIR="${pkgdir}/usr/${CHOST}" install
+
+  cd "${srcdir}/${_realname}-${pkgver/_/-}"
+  mkdir -p "${pkgdir}/usr/${CHOST}/share/licenses/${_realname}"
+  grep -B 100 '$Id' README > "${pkgdir}/usr/${CHOST}/share/licenses/${_realname}/LICENSE"
+}
