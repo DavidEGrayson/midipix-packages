@@ -21,7 +21,8 @@ possible.
 == How to use megabuild ==
 
 1. Install Ruby:
-       pacman -S ruby
+       
+        pacman -S ruby
 2. Megabuild will place all of its build files in `$PWD/build`, `$PWD/build.log`, and `$PWD/pkg`, where `$PWD` is your current working directory.  So if you want those files to be somewhere special, you can change to that directory now.
 3. Check the status of your system by running:
        ./megabuild.rb --status
