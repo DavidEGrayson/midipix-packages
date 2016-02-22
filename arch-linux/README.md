@@ -31,13 +31,13 @@ How to use megabuild
         ./megabuild.rb --status
 
 4. This basically shows a list of packages, in the order that
-Megabuild wants to build them, and tells you if they are installed or
+megabuild wants to build them, and tells you if they are installed or
 not.  Note that pacman packages have a cool feature where a package
 with one name can declare that it provides the features of a package
 with a different name.  This feature is controlled by the `provides`
 array in the PKGBUILD scripts.  For example,
 `x86_64-nt64-midipix-psxscl` provides `x86_64-nt64-midipix-psxstub`.
-So if the Megabuild status command tells you that the
+So if the megabuild status command tells you that the
 `x86_64-nt64-midipix-psxstub` dependency is satisfied, it means that
 either there is a package with that name installed or there is another
 package that provides the same features.
