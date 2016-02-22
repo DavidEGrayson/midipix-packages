@@ -29,6 +29,7 @@
 require 'optparse'
 require 'pathname'
 require 'fileutils'
+require 'bcrypt'
 
 def packages_in_order(hosts)
   packages = [
@@ -50,8 +51,8 @@ def packages_in_order(hosts)
       "#{host}-pemagine",
       "#{host}-ntapi",
       "#{host}-psxscl",
-      # TODO: "#{host}-ntcon",
-      # TODO: "#{host}-ntctty",
+      "#{host}-ntcon",
+      "#{host}-ntctty",
     ]
   end
 
@@ -152,20 +153,41 @@ def build_and_install_dependency(hosts, package, options = {})
   install_package(package_file, options[:noconfirm])
 end
 
+def prepare_directories
+  FileUtils.mkdir_p BuildDir + 'pkg'
+  FileUtils.mkdir_p BuildDir + 'build' + 'downloads'
+end
+
+def prepare_sudo
+  cmd = "sudo pacman -Q"
+  puts "Acquiring/checking sudo permissions by running '#{cmd}'"
+  `#{cmd}`
+  if !$?.success?
+    $stderr.puts "Acquiring/checking sudo permissions failed."
+    exit 2
+  end
+end
+
+def prepare_midipix_internal
+  hash = "$2a$10$ts1/X9R5vbbRr19MPK0xUOKeZht3o6SwbPePCT7J.LrY0d53haN/C"
+  if BCrypt::Password.new(hash) != ENV['midipix_internal']
+    $stderr.puts "Error: $midipix_internal is wrong."
+    $stderr.puts "You need to set the environment variable $midipix_internal such that"
+    $stderr.puts "  http://git.midipix.org/cgit.cgi/$midipix_internal/psxscl"
+    $stderr.puts "is a valid repository for the internal version of psxscl."
+    $stderr.puts "See http://midipix.org/ for info about the internal repos."
+    exit 3
+  end
+end
+
 def prepare_for_build(options)
   puts "Preparing to build packages"
   puts "PKGBUILD script directory: #{SrcDir}"
   puts "Build directory: #{BuildDir}"
 
-  FileUtils.mkdir_p BuildDir + 'pkg'
-  FileUtils.mkdir_p BuildDir + 'build' + 'downloads'
-
-  if options[:noconfirm]
-    cmd = "sudo pacman -Q"
-    puts "Acquiring/checking sudo permissions by running '#{cmd}'"
-    `#{cmd}`
-    raise "Acquiring/checking sudo permissions failed." if !$?.success?
-  end
+  prepare_directories
+  prepare_sudo if options[:noconfirm]
+  prepare_midipix_internal
 end
 
 def megabuild(hosts, options)
