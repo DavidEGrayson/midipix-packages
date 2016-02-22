@@ -53,6 +53,7 @@ def packages_in_order(hosts)
       "#{host}-psxscl",
       "#{host}-ntcon",
       "#{host}-ntctty",
+      "#{host}-xz",
     ]
   end
 
@@ -155,6 +156,12 @@ def build_and_install_dependency(hosts, package, options = {})
   build_params = select_build_params(hosts, package)
   package_file = build_package(build_params)
   install_package(package_file, options[:noconfirm])
+
+  satisfied = dependency_satisfied?(package)
+  if !satisfied
+    raise "Error: Dependency #{package} not satisfied by building " \
+      " and installing with params #{build_params.inspect}."
+  end
 end
 
 def prepare_directories
