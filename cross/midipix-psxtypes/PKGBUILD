@@ -1,8 +1,6 @@
 # Maintainer: David Grayson <davidegrayson@gmail.com>
 
-_target=x86_64-nt64-midipix
-
-pkgname=$_target-psxtypes
+pkgname=$CHOST-psxtypes
 pkgver=r6.4d71ed8
 pkgrel=1
 pkgdesc="Portable type definitions for a free-standing environment"
@@ -21,5 +19,5 @@ pkgver() {
 
 package() {
   cd "${srcdir}/psxtypes"
-  make DESTDIR="${pkgdir}/usr/${_target}" install
+  make DESTDIR="${pkgdir}/usr/$CHOST" install
 }
