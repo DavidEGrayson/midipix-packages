@@ -1,0 +1,37 @@
+# Maintainer: David Grayson <davidegrayson@gmail.com>
+
+pkgname=$CHOST-psxscl
+provides=($CHOST-psxstub)
+conflicts=($CHOST-psxstub)
+pkgver=r160.4e6d89d
+pkgrel=1
+pkgdesc="A thread-safe system call layer library"
+arch=('any')
+url="http://git.midipix.org/$midipix_internal/psxscl"
+license=('GPL2' 'GPL3')
+depends=()
+makedepends=($CHOST-{gcc,ntapi,psxtypes,pemagine,dalist})
+options=(!strip)
+source=("git://midipix.org/$midipix_internal/psxscl")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "${srcdir}/psxscl"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  rm -rf "${srcdir}/build-$CHOST"
+  mkdir "${srcdir}/build-$CHOST"
+  cd "${srcdir}/build-$CHOST"
+
+  ../psxscl/configure --host="$CHOST"
+}
+
+package() {
+  cd "${srcdir}/build-$CHOST"
+  make DESTDIR="${pkgdir}/usr/$CHOST" install
+
+  cd "${srcdir}/psxscl"
+  install -Dm644 COPYING.PSXSCL "${pkgdir}/usr/$CHOST/share/licenses/psxscl/COPYING.PSXSCL"
+}
