@@ -14,7 +14,7 @@ checkdepends=()
 optdepends=()
 options=(!strip)
 source=(
-  "http://tukaani.org/${pkgname}/xz-${pkgver}.tar.gz"{,.sig}
+  "http://tukaani.org/xz/xz-${pkgver}.tar.gz"{,.sig}
   "http://git.midipix.org/cgit.cgi/ports/portage/plain/config.cache"
   midipix-config.patch)
 sha256sums=('73df4d5d34f0468bd57d09f2d8af363e95ed6cc3a4a86129d2f2c366259902a2'
@@ -29,12 +29,12 @@ prepare() {
 }
 
 build() {
-  rm -rf "build-${CHOST}"
-  mkdir "build-${CHOST}"
-  cd "${srcdir}/build-${CHOST}"
+  rm -rf "build-$CHOST"
+  mkdir "build-$CHOST"
+  cd "${srcdir}/build-$CHOST"
   cp ../config.cache .
   "../${_realname}-${pkgver}/configure" -C \
-      --host="${CHOST}" --prefix=""
+      --host="$CHOST" --prefix=""
   make
 }
 
