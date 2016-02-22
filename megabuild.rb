@@ -86,12 +86,19 @@ def purge(hosts)
 end
 
 def select_build_params(hosts, name)
+  original_name = name
+  name = original_name.dup
+
   params = {}
   params[:env] = {}
 
+  chost = nil
   hosts.each do |host|
     prefix = "#{host}-"
-    name.sub!(prefix, 'midipix-')
+    if name.start_with?(prefix)
+      chost = host
+      name.sub!(prefix, 'midipix-')
+    end
   end
 
   if md = name.match(/-stage(\d+)$/)
@@ -99,12 +106,29 @@ def select_build_params(hosts, name)
     name.sub!(md[0], '')
   end
 
-  dir = SrcDir + name
-  if !dir.directory?
-    raise "PKGBUILD directory not present: #{dir}"
+  if !params[:dir]
+    dir = SrcDir + 'arch-linux' + name
+    if dir.directory?
+      params[:dir] = dir
+    end
   end
 
-  params[:dir] = dir
+  if !params[:dir]
+    dir = SrcDir + 'cross' + name
+    if dir.directory?
+      params[:dir] = dir
+
+      if chost == 'x86_64-nt64-midipix'
+        params[:config] = 'makepkg-nt64.conf'
+      else
+        raise "Not sure what config file to use for chost #{chost}."
+      end
+    end
+  end
+
+  if !params[:dir]
+    raise "PKGBUILD directory for could not be found for: #{original_name}"
+  end
 
   params
 end
@@ -135,6 +159,10 @@ end
 def build_package(build_params)
   dir = build_params[:dir]
   env = build_params[:env].dup
+
+  if build_params.key?(:config)
+    env['MAKEPKG_CONF'] = File.realpath(build_params[:config])
+  end
 
   env['PKGDEST'] = (BuildDir + 'pkg').to_s
   env['SRCPKGDEST'] = (BuildDir + 'srcpkg').to_s
