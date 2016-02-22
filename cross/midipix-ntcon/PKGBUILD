@@ -1,0 +1,35 @@
+# Maintainer: David Grayson <davidegrayson@gmail.com>
+
+pkgname=$CHOST-ntcon
+pkgver=r7.b895c9b
+pkgrel=1
+pkgdesc="Free-standing console interface definitions"
+arch=('any')
+url="http://git.midipix.org/$midipix_internal/ntcon"
+license=('MIT')
+depends=($CHOST-pemagine)
+makedepends=($CHOST-gcc $CHOST-pemagine)
+options=(!strip staticlibs)
+source=("git://midipix.org/$midipix_internal/ntcon")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "${srcdir}/ntcon"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  rm -rf "${srcdir}/build-$CHOST"
+  mkdir "${srcdir}/build-$CHOST"
+  cd "${srcdir}/build-$CHOST"
+
+  ../ntcon/configure --host="$CHOST"
+}
+
+package() {
+  cd "${srcdir}/build-$CHOST"
+  make DESTDIR="${pkgdir}/usr/$CHOST" install
+
+  cd "${srcdir}/ntcon"
+  install -Dm644 COPYING.NTCON "${pkgdir}/usr/$CHOST/share/licenses/ntcon/COPYING.NTCON"
+}
