@@ -178,6 +178,8 @@ package() {
   fi
 
   # Remove files that could conflict with host GCC.
-  rm -r "${pkgdir}/usr/share/info"
-  rm -r "${pkgdir}/usr/share/man/man7"
+  rm -rf "${pkgdir}/usr/share/info"
+  rm -rf "${pkgdir}/usr/share/man/man7"
+  rm -rf "${pkgdir}/usr/share/gcc-${_gccver}"
+  rm -f "${pkgdir}/usr/lib/libiberty.a"  # might cause trouble later
 }
