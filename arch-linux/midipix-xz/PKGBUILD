@@ -1,19 +1,26 @@
 # Maintainer: David Grayson <davidegrayson@gmail.com>
 
+# TODO: clean this up, maybe use a makepkg config file
 _host=x86_64-nt64-midipix
-pkgname=$_host-xz
+CHOST=$_host
+CFLAGS=""
+LDFLAGS=""
+
+_realname=xz
+pkgname=$_host-$_realname
 pkgver=5.2.2
 pkgrel=1
 pkgdesc='Library and command line tools for XZ and LZMA compressed files'
 arch=('any')
-url='https://tukaani.org/xz'
+url='http://tukaani.org/xz'
 license=('GPL' 'LGPL' 'custom')
 depends=()
 makedepends=()
 checkdepends=()
 optdepends=()
+options=(!strip)
 source=(
-  "https://tukaani.org/${pkgname}/${pkgname}-${pkgver}.tar.gz"{,.sig}
+  "http://tukaani.org/${pkgname}/${_realname}-${pkgver}.tar.gz"{,.sig}
   "http://git.midipix.org/cgit.cgi/ports/portage/plain/config.cache"
   midipix-config.patch)
 sha256sums=('73df4d5d34f0468bd57d09f2d8af363e95ed6cc3a4a86129d2f2c366259902a2'
@@ -23,7 +30,7 @@ sha256sums=('73df4d5d34f0468bd57d09f2d8af363e95ed6cc3a4a86129d2f2c366259902a2'
 validpgpkeys=('3690C240CE51B4670D30AD1C38EE757D69184620')
 
 prepare() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
+  cd "${srcdir}/${_realname}-${pkgver}"
   patch -p1 -i ../midipix-config.patch
 }
 
@@ -32,7 +39,7 @@ build() {
   mkdir "build-${CHOST}"
   cd "${srcdir}/build-${CHOST}"
   cp ../config.cache .
-  "../${pkgname}-${pkgver}/configure" -C \
+  "../${_realname}-${pkgver}/configure" -C \
       --host="${CHOST}" --prefix=""
   make
 }
