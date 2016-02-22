@@ -1,5 +1,7 @@
 # Maintainer: David Grayson <davidegrayson@gmail.com>
 
+# TODO: why is x86_64-nt64-midipix-c++filt not getting installed?
+
 # Note: Right now this package just does "GCC, stage 1" from
 # http://git.midipix.org/cgit.cgi/cbb/cbb-gcc/tree/cbb-midipix-cross-gcc.sh
 
@@ -159,9 +161,6 @@ build() {
   if [ "$PKG_STAGE" -ge 9 ]; then
     echo "---- all"
     make
-    # TODO: make sure libstdc++ gets installed
-    #echo "---- all-target-libstdc++-v3"
-    #make all-target-libstdc++-v3
   fi
 }
 
@@ -176,7 +175,6 @@ package() {
 
   if [ "$PKG_STAGE" -ge 9 ]; then
     make DESTDIR="$pkgdir" install
-    #make DESTDIR="$pkgdir" install-target-libstdc++-v3
   fi
 
   # Remove files that could conflict with host GCC.
