@@ -1,0 +1,35 @@
+# Maintainer: David Grayson <davidegrayson@gmail.com>
+
+pkgname=$CHOST-dalist
+pkgver=r23.bb4eb7e
+pkgrel=1
+pkgdesc="Windows NT native API core library"
+arch=('any')
+url="http://git.midipix.org/$midipix_internal/dalist"
+license=('GPL2' 'GPL3')
+makedepends=($CHOST-gcc $CHOST-psxtypes)
+options=(!strip staticlibs)
+source=("git://midipix.org/$midipix_internal/dalist")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "${srcdir}/dalist"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  rm -rf "${srcdir}/build-$CHOST"
+  mkdir "${srcdir}/build-$CHOST"
+  cd "${srcdir}/build-$CHOST"
+
+  ../dalist/configure --debug --host="$CHOST"
+  make
+}
+
+package() {
+  cd "${srcdir}/build-$CHOST"
+  make DESTDIR="${pkgdir}/usr/${CHOST}" install
+
+  cd "${srcdir}/dalist"
+  install -Dm644 COPYING.DALIST "${pkgdir}/usr/${CHOST}/share/licenses/dalist/COPYING.DALIST"
+}
