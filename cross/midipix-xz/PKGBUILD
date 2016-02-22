@@ -19,7 +19,7 @@ source=(
   midipix-config.patch)
 sha256sums=('73df4d5d34f0468bd57d09f2d8af363e95ed6cc3a4a86129d2f2c366259902a2'
             'SKIP'
-            '1e8fa44f9da32cf7b33309ce9b60f42427b6c83a7e59aea8f4d577a8a805fc34'
+            'SKIP'
             '0750bd6bad458220945c81dc96b5513239508228e435a1417d6277227ab618fb')
 validpgpkeys=('3690C240CE51B4670D30AD1C38EE757D69184620')
 
