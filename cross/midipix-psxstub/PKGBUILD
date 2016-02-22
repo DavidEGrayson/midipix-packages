@@ -1,16 +1,14 @@
 # Maintainer: David Grayson <davidegrayson@gmail.com>
 
-_target=x86_64-nt64-midipix
-
-pkgname=$_target-psxstub
-conflicts=($_target-psxscl)
+pkgname=$CHOST-psxstub
+conflicts=($CHOST-psxscl)
 pkgver=r8.11957ad
 pkgrel=1
 pkgdesc="Stub that stands in for psxscl for building the toolchain."
 arch=('any')
 url="http://git.midipix.org/cgit.cgi/psxstub/"
 license=('unknown')  # psxstub has no license info
-makedepends=($_target-gcc-stage1)
+makedepends=($CHOST-gcc-stage1)
 options=(!strip)
 source=("git://midipix.org/psxstub")
 sha256sums=('SKIP')
@@ -21,14 +19,14 @@ pkgver() {
 }
 
 build() {
-  rm -rf "${srcdir}/build-$_target"
-  mkdir "${srcdir}/build-$_target"
-  cd "${srcdir}/build-$_target"
+  rm -rf "${srcdir}/build-$CHOST"
+  mkdir "${srcdir}/build-$CHOST"
+  cd "${srcdir}/build-$CHOST"
   cp ../psxstub/stub.S ../psxstub/Makefile .
-  make TARGET="$_target"
+  make TARGET="$CHOST"
 }
 
 package() {
-  cd "${srcdir}/build-$_target"
-  make TARGET="$_target" DESTDIR="${pkgdir}/usr/${_target}" install
+  cd "${srcdir}/build-$CHOST"
+  make TARGET="$CHOST" DESTDIR="${pkgdir}/usr/$CHOST" install
 }
