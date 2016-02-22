@@ -1,4 +1,7 @@
+*.pkg.tar.xz
 pkg
 src
-*.pkg.tar.xz
 config.cache
+/build
+/build.log
+/pkg
