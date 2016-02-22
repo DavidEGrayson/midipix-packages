@@ -8,14 +8,10 @@ pkgdesc='Library and command line tools for XZ and LZMA compressed files'
 arch=('any')
 url='http://tukaani.org/xz'
 license=('GPL' 'LGPL' 'custom')
-depends=()
 makedepends=($CHOST-gcc)
-checkdepends=()
-optdepends=()
-source=(
-  "http://tukaani.org/xz/xz-${pkgver}.tar.gz"{,.sig}
-  "http://git.midipix.org/cgit.cgi/ports/portage/plain/config.cache"
-  midipix-config.patch)
+source=("http://tukaani.org/xz/xz-${pkgver}.tar.gz"{,.sig}
+        "http://git.midipix.org/cgit.cgi/ports/portage/plain/config.cache"
+        midipix-config.patch)
 sha256sums=('73df4d5d34f0468bd57d09f2d8af363e95ed6cc3a4a86129d2f2c366259902a2'
             'SKIP'
             'SKIP'
