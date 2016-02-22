@@ -1,28 +1,22 @@
 # Maintainer: David Grayson <davidegrayson@gmail.com>
 
-# TODO: for stage1 midipix, I think what is done in arch/nt32/src/nt32/chelper.S
-# is not very safe.  Could we get by without defining those dummy functions?
-# Could we at least perform a division by zero or something in them?
-
-_target=x86_64-nt64-midipix
-_arch=nt64
-_muslver=1.1.12
-
 if [ -z "$PKG_STAGE" ]; then
   PKG_STAGE=9
 fi
 
 if [ "$PKG_STAGE" -eq 1 ]; then
-  pkgname=$_target-musl-stage1
-  provides=($_target-musl-stage1)
+  pkgname=$CHOST-musl-stage1
+  provides=($CHOST-musl-stage1)
   conflicts=()
-  makedepends=($_target-gcc-stage1 lazy)
+  makedepends=($CHOST-gcc-stage1 lazy)
 else
-  pkgname=$_target-musl
-  provides=($_target-musl $_target-musl-stage1)
-  conflicts=($_target-musl-stage1)
-  makedepends=($_target-gcc-stage2 lazy)
+  pkgname=$CHOST-musl
+  provides=($CHOST-musl $CHOST-musl-stage1)
+  conflicts=($CHOST-musl-stage1)
+  makedepends=($CHOST-gcc-stage2 lazy)
 fi
+
+_muslver=1.1.12
 pkgver=1.1.12.r48.e43f5af
 pkgrel=1
 pkgdesc="C standard library implementation (musl) for midipix 64-bit target"
@@ -54,15 +48,14 @@ build() {
 
   cd "${srcdir}/build"
 
-  export lz_cflags_debug="-g3 -O0"  # for now, allow easy debugging
   lazy \
       -x config \
-      -t $_target \
-      -a $_arch \
+      -t $CHOST \
+      -a $CARCH \
       -c gcc \
       -n musl \
       -p "../musl-${_muslver}" \
-      -f "/usr/${_target}"
+      -f "/usr/${CHOST}"
 
   if [ "$PKG_STAGE" -eq 1 ]; then
     ./lazy -x build -e libc_no_complex
@@ -83,5 +76,5 @@ package() {
   fi
 
   cd "${srcdir}/musl-${_muslver}"
-  install -Dm644 COPYRIGHT "${pkgdir}/usr/$_target/share/licenses/musl/COPYRIGHT"
+  install -Dm644 COPYRIGHT "${pkgdir}/usr/$CHOST/share/licenses/musl/COPYRIGHT"
 }
