@@ -4,6 +4,10 @@
 # executable on the build system (which might have been configured differently)
 # to build its terminfo database.
 
+# TODO: make NCURSES_PATHSEP be ; instead of :.  It is used in db_iterator.c and
+# I can see that the colon is causing prolems because "C:\\Users" gets split
+# into "C" and "\\Users".
+
 _realname=ncurses
 pkgname=$CHOST-$_realname
 pkgver=6.0
@@ -58,8 +62,11 @@ package() {
   grep -B 100 '$Id' README > "${pkgdir}/usr/$CHOST/share/licenses/${_realname}/LICENSE"
 
   # Fix the terminfo database: it was installed by tic on the build
-  # system and use mixed case directory names.
+  # system and use mixed case directory names and filenames.
   cd "${pkgdir}/usr/$CHOST/share/terminfo"
+  rm 2/2621a
+  rm h/hp70092A
+  rm h/hp2621a
   for dir in `ls`; do
     cmd=$(printf "mv %s %02x" "$dir" "'$dir")
     echo "$cmd"
