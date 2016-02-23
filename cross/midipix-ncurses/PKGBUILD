@@ -1,5 +1,9 @@
 # Maintainer: David Grayson <davidegrayson@gmail.com>
 
+# Warning: ncurses does not support cross-compiling very well. It uses the "tic"
+# executable on the build system (which might have been configured differently)
+# to build its terminfo database.
+
 _realname=ncurses
 pkgname=$CHOST-$_realname
 pkgver=6.0
@@ -31,6 +35,7 @@ build() {
   "../${_realname}-${pkgver/_/-}/configure" -C \
      --host="$CHOST" \
      --prefix="" \
+     --disable-mixed-case \
      --with-normal \
      --without-debug \
      --with-shared \
@@ -49,6 +54,15 @@ package() {
   make DESTDIR="${pkgdir}/usr/${CHOST}" install
 
   cd "${srcdir}/${_realname}-${pkgver/_/-}"
-  mkdir -p "${pkgdir}/usr/${CHOST}/share/licenses/${_realname}"
-  grep -B 100 '$Id' README > "${pkgdir}/usr/${CHOST}/share/licenses/${_realname}/LICENSE"
+  mkdir -p "${pkgdir}/usr/$CHOST/share/licenses/${_realname}"
+  grep -B 100 '$Id' README > "${pkgdir}/usr/$CHOST/share/licenses/${_realname}/LICENSE"
+
+  # Fix the terminfo database: it was installed by tic on the build
+  # system and use mixed case directory names.
+  cd "${pkgdir}/usr/$CHOST/share/terminfo"
+  for dir in `ls`; do
+    cmd=$(printf "mv %s %02x" "$dir" "'$dir")
+    echo "$cmd"
+    $cmd
+  done
 }
