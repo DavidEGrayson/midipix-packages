@@ -1,4 +1,4 @@
---- ncurses-6.0-orig/config.sub.orig
+--- ncurses-6.0-orig/config.sub
 +++ ncurses-6.0/config.sub
 @@ -807,6 +807,9 @@
  	microblaze*)
@@ -19,3 +19,23 @@
  	      | -linux-newlib* | -linux-musl* | -linux-uclibc* \
  	      | -uxpv* | -beos* | -mpeix* | -udk* | -moxiebox* \
  	      | -interix* | -uwin* | -mks* | -rhapsody* | -darwin* | -opened* \
+--- ncurses-6.0-orig/configure
++++ ncurses-6.0/configure
+@@ -5856,7 +5856,7 @@
+ 		LD_RPATH_OPT="-rpath "
+ 	fi
+ 	;;
+-(linux*|gnu*|k*bsd*-gnu)
++(linux*|gnu*|k*bsd*-gnu|midipix)
+ 	LD_RPATH_OPT="-Wl,-rpath,"
+ 	;;
+ (openbsd[2-9].*|mirbsd*)
+@@ -6188,7 +6188,7 @@
+ 		fi
+ 		cf_cv_rm_so_locs=yes
+ 		;;
+-	(linux*|gnu*|k*bsd*-gnu)
++	(linux*|gnu*|k*bsd*-gnu|midipix)
+ 		if test "$DFT_LWR_MODEL" = "shared" ; then
+ 			LOCAL_LDFLAGS="${LD_RPATH_OPT}\$(LOCAL_LIBDIR)"
+ 			LOCAL_LDFLAGS2="$LOCAL_LDFLAGS"

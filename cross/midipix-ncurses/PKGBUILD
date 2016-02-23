@@ -15,7 +15,7 @@ source=("ftp://invisible-island.net/ncurses/ncurses-${pkgver/_/-}.tar.gz"{,.asc}
 sha256sums=('f551c24b30ce8bfb6e96d9f59b42fbea30fa3a6123384172f9e7284bcf647260'
             'SKIP'
             '1e8fa44f9da32cf7b33309ce9b60f42427b6c83a7e59aea8f4d577a8a805fc34'
-            '92004e4917f58a9590b2bfab81df589161665d702acbf30de5dbf4d15c9fcc68')
+            '69bfb54eefdda77dbb11d03a962693e46bc1d993baf21d73003c7030a3057dc6')
 validpgpkeys=('C52048C0C0748FEE227D47A2702353E0F7E48EDB')  # Thomas Dickey
 
 prepare() {
@@ -29,7 +29,18 @@ build() {
   cd "${srcdir}/build-$CHOST"
   cp ../config.cache .
   "../${_realname}-${pkgver/_/-}/configure" -C \
-      --host="$CHOST" --prefix=""
+     --host="$CHOST" \
+     --prefix="" \
+     --with-normal \
+     --without-debug \
+     --with-shared \
+     --with-cxx-shared \
+     --with-cxx-binding \
+     --without-ada \
+     --enable-widec \
+     --enable-pc-files \
+     --enable-ext-colors \
+     --enable-ext-mouse
   make
 }
 
