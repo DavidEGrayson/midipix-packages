@@ -7,6 +7,12 @@
 # TODO: make NCURSES_PATHSEP be ; instead of :.  It is used in db_iterator.c and
 # I can see that the colon is causing prolems because "C:\\Users" gets split
 # into "C" and "\\Users".
+# TODO: is it bad that this package installs a ncursesw/ncurses.h
+# instead of just installing ncurses.h in the top level?  Is that because
+# we enabled wide characters?
+# TODO: why does the hello world example from
+# http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/helloworld.html
+# give a segmentation fault?
 
 _realname=ncurses
 pkgname=$CHOST-$_realname
