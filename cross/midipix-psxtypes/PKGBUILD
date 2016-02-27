@@ -6,7 +6,7 @@ pkgrel=1
 pkgdesc="Portable type definitions for a free-standing environment"
 arch=('any')
 url="http://git.midipix.org/$midipix_internal/psxtypes"
-license=('unknown')  # psxtypes has no license info
+license=('MIT')
 source=("git://midipix.org/$midipix_internal/psxtypes")
 sha256sums=('SKIP')
 
