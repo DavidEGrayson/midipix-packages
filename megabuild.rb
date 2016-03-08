@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
-# megabuild is a Ruby script that builds all the packages in this directory.
+# megabuild is a Ruby script that builds all the packages in this directory
+# by invoking makepkg in the right order with the right arguments.
+# It skips things that were already built.
 #
 # Build tools:
 # 1) lazy
@@ -29,7 +31,7 @@
 require 'optparse'
 require 'pathname'
 require 'fileutils'
-require 'bcrypt'
+require 'digest'
 
 def packages_in_order(hosts)
   packages = [
@@ -213,8 +215,8 @@ def prepare_sudo
 end
 
 def prepare_midipix_internal
-  hash = "$2a$10$ts1/X9R5vbbRr19MPK0xUOKeZht3o6SwbPePCT7J.LrY0d53haN/C"
-  if BCrypt::Password.new(hash) != ENV['midipix_internal']
+  hash = "2f7a9f6c0a4731ce90464b671bbb8e50615bbd87a50bf072f7f532c40c699357"
+  if hash != Digest::SHA2.hexdigest('DavidEGrayson' + ENV['midipix_internal'].to_s)
     $stderr.puts "Error: $midipix_internal is wrong."
     $stderr.puts "You need to set the environment variable $midipix_internal such that"
     $stderr.puts "  http://git.midipix.org/cgit.cgi/$midipix_internal/psxscl"
