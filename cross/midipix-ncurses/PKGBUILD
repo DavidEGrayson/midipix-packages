@@ -41,7 +41,13 @@ build() {
   rm -rf "build-$CHOST"
   mkdir "build-$CHOST"
   cd "${srcdir}/build-$CHOST"
+
+  # _GNU_SOURCE or _XOPEN_SOURCE is needed for wchar.h to actually define a
+  # prototype for wcwidth.
   cp ../config.cache .
+
+  CFLAGS="$CFLAGS -D_XOPEN_SOURCE=700"
+
   "../${_realname}-${pkgver/_/-}/configure" -C \
      --host="$CHOST" \
      --prefix="" \

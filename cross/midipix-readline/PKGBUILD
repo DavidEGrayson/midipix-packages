@@ -60,9 +60,9 @@ build() {
   mkdir "build-$CHOST"
   cd "build-$CHOST"
 
-  # _GNU_SOURCE (or _XOPEN_SOURCE) is needed for wchar.h to actually define a
+  # _GNU_SOURCE or _XOPEN_SOURCE is needed for wchar.h to actually define a
   # prototype for wcwidth.
-  CFLAGS="$CFLAGS -D_GNU_SOURCE"
+  CFLAGS="$CFLAGS -D_XOPEN_SOURCE=700"
 
   "../$_realname-$_basever/configure" --prefix=/usr/"$CHOST"
   make
