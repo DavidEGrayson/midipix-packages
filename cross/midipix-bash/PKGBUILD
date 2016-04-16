@@ -15,7 +15,7 @@ url='https://www.gnu.org/software/bash/bash.html'
 license=('GPL')
 arch=('any')
 depends=("${CHOST}-readline" "${CHOST}-ncurses")
-optdepends=('bash-completion: for tab completion')
+optdepends=('${CHOST}-bash-completion: for tab completion')
 makedepends=("${CHOST}-gcc")
 provides=('sh')
 # backup=("/usr/${CHOST}/etc/inputrc")
@@ -150,4 +150,5 @@ build() {
 package() {
   cd "build-$CHOST"
   make DESTDIR="$pkgdir" install
+  rm "$pkgdir/usr/$CHOST/share/info/dir"
 }

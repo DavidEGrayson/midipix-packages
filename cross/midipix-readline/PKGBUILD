@@ -71,4 +71,5 @@ build() {
 package() {
   cd "build-$CHOST"
   make DESTDIR="$pkgdir" install
+  rm "$pkgdir/usr/$CHOST/share/info/dir"
 }

@@ -34,6 +34,7 @@ def packages_in_order(hosts)
       "#{host}-xz",
       "#{host}-ncurses",
       "#{host}-readline",
+      "#{host}-bash",
     ]
   end
 
