@@ -1,5 +1,6 @@
 # Maintainer: David Grayson <davidegrayson@gmail.com>
 
+# TODO: probably should use the midipix config.cache
 # TODO: install info files using an install script like Arch Linux does?
 # TODO: install an inputrc file?
 
@@ -17,7 +18,7 @@ depends=("${CHOST}-ncurses")
 makedepends=("${CHOST}-gcc")
 # backup=("/usr/${CHOST}/etc/inputrc")
 options=('!emptydirs')
-source=("http://ftp.gnu.org/gnu/readline/readline-$_basever.tar.gz"{,.sig})
+source=("https://ftp.gnu.org/gnu/readline/readline-$_basever.tar.gz"{,.sig})
 sha256sums=('56ba6071b9462f980c5a72ab0023893b65ba6debb4eeb475d7a563dc65cafd43'
             'SKIP'
             '1a79bbb6eaee750e0d6f7f3d059b30a45fc54e8e388a8e05e9c3ae598590146f'
