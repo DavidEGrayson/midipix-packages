@@ -38,11 +38,9 @@ sha256sums=('56ba6071b9462f980c5a72ab0023893b65ba6debb4eeb475d7a563dc65cafd43'
             'SKIP')
 validpgpkeys=('7C0135FB088AAF6C66C650B9BB5869F064EA74AB')  # Chet Ramey
 
-if [ $_patchlevel -gt 0 ]; then
-    for (( _p=1; _p <= $((10#${_patchlevel})); _p++ )); do
-        source=(${source[@]} https://ftp.gnu.org/gnu/readline/readline-$_basever-patches/readline${_basever//.}-$(printf "%03d" $_p){,.sig})
-    done
-fi
+for (( _p=1; _p <= $((10#${_patchlevel})); _p++ )); do
+  source=(${source[@]} https://ftp.gnu.org/gnu/readline/readline-$_basever-patches/readline${_basever//.}-$(printf "%03d" $_p){,.sig})
+done
 
 prepare() {
   cd "$_realname-$_basever"
