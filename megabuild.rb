@@ -33,6 +33,7 @@ def packages_in_order(hosts)
       "#{host}-ntctty",
       "#{host}-xz",
       "#{host}-ncurses",
+      "#{host}-readline",
     ]
   end
 
