@@ -1,4 +1,6 @@
 *.pkg.tar.xz
+*.log
+*.log.*
 pkg
 src
 config.cache
