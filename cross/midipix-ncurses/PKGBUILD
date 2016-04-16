@@ -47,7 +47,7 @@ build() {
      --prefix="" \
      --disable-mixed-case \
      --with-normal \
-     --without-debug \
+     --with-debug \
      --with-shared \
      --with-cxx-shared \
      --with-cxx-binding \
@@ -55,7 +55,11 @@ build() {
      --enable-widec \
      --enable-pc-files \
      --enable-ext-colors \
-     --enable-ext-mouse
+     --enable-ext-mouse \
+     --enable-assertions \
+     --with-trace
+
+  # TODO: remove debugging options and add --without-debug back
   make
 }
 

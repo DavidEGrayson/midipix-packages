@@ -3,30 +3,6 @@
 # megabuild is a Ruby script that builds all the packages in this directory
 # by invoking makepkg in the right order with the right arguments.
 # It skips things that were already built.
-#
-# Build tools:
-# 1) lazy
-#
-# Toolchain:
-# 2) midipix-binutils
-# 3) midipix-gcc-stage1
-# 4) midipix-psxstub
-# 5) midipix-musl-stage1
-# 6) midipix-gcc-stage2
-# 7) midipix-musl
-# 8) midipix-gcc
-#
-# Midipix runtime libraries:
-# 9) midipix-psxtypes
-# 10) midipix-dalist
-# 11) midipix-pemagine
-# 12) midipix-ntapi
-# 13) midipix-psxscl
-#
-# More stuffs:
-# 14) midipix-ntcon
-# 15) midipix-ntctty
-# 16) perk
 
 require 'optparse'
 require 'pathname'

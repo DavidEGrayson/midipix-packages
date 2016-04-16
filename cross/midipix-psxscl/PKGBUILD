@@ -3,7 +3,7 @@
 pkgname=$CHOST-psxscl
 provides=($CHOST-psxstub)
 conflicts=($CHOST-psxstub)
-pkgver=r160.4e6d89d
+pkgver=r196.da85a96
 pkgrel=1
 pkgdesc="A thread-safe system call layer library"
 arch=('any')

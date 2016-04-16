@@ -1,7 +1,7 @@
 # Maintainer: David Grayson <davidegrayson@gmail.com>
 
 pkgname=$CHOST-psxtypes
-pkgver=r6.4d71ed8
+pkgver=r2.2184c40
 pkgrel=1
 pkgdesc="Portable type definitions for a free-standing environment"
 arch=('any')
