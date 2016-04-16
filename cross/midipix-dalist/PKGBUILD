@@ -1,7 +1,7 @@
 # Maintainer: David Grayson <davidegrayson@gmail.com>
 
 pkgname=$CHOST-dalist
-pkgver=r23.bb4eb7e
+pkgver=r34.2573588
 pkgrel=1
 pkgdesc="Windows NT native API core library"
 arch=('any')

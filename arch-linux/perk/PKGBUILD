@@ -1,7 +1,7 @@
 # Maintainer: David Grayson <davidegrayson@gmail.com>
 
 pkgname=perk
-pkgver=r148.dfa96be
+pkgver=r172.50b9585
 pkgrel=1
 pkgdesc="PE (Portale Executable) resource kit"
 arch=('i686' 'x86_64')
