@@ -13,6 +13,8 @@
 # TODO: why does the hello world example from
 # http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/helloworld.html
 # give a segmentation fault?
+# TODO: stubs for libncurses.so and libncurses++.so like Arch Linux has?
+#   They are just one-line text files.
 
 _realname=ncurses
 pkgname=$CHOST-$_realname
