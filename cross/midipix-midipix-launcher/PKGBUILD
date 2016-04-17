@@ -1,5 +1,8 @@
 # Maintainer: David Grayson <davidegrayson@gmail.com>
 
+# Eventually this package should provide executables and/or shortcuts
+# For now, it's just a simple shell script.
+
 _realname=midipix-launcher
 pkgname=$CHOST-$_realname
 pkgver=0.0.1
