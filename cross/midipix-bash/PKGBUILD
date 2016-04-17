@@ -21,8 +21,7 @@ arch=('any')
 depends=("${CHOST}-readline" "${CHOST}-ncurses")
 optdepends=("${CHOST}-bash-completion: for tab completion")
 makedepends=("${CHOST}-gcc")
-provides=('sh')
-# backup=("/usr/${CHOST}/etc/inputrc")
+provides=("${CHOST}-sh")
 options=('!emptydirs')
 source=("https://ftp.gnu.org/gnu/bash/bash-$_basever.tar.gz"{,.sig}
         "http://git.midipix.org/cgit.cgi/ports/portage/plain/${_realname}-${_basever}.midipix.patch"
