@@ -18,9 +18,13 @@ depends=("${CHOST}-ncurses")
 makedepends=("${CHOST}-gcc")
 # backup=("/usr/${CHOST}/etc/inputrc")
 options=('!emptydirs')
-source=("https://ftp.gnu.org/gnu/readline/readline-$_basever.tar.gz"{,.sig})
+source=("https://ftp.gnu.org/gnu/readline/readline-$_basever.tar.gz"{,.sig}
+        "http://git.midipix.org/cgit.cgi/ports/portage/plain/config.cache"
+        "midipix-config.patch")
 sha256sums=('56ba6071b9462f980c5a72ab0023893b65ba6debb4eeb475d7a563dc65cafd43'
             'SKIP'
+            '7e900939da92ab4c1df5a655ee2ea72f56cea1bbf0cad60cba3c76b6fe890f40'
+            '806a2bde8571293ecc4a01dea2071b09f9c85599a9cbee040ca9a06ed5e85a9f'
             '1a79bbb6eaee750e0d6f7f3d059b30a45fc54e8e388a8e05e9c3ae598590146f'
             'SKIP'
             '39e304c7a526888f9e112e733848215736fb7b9d540729b9e31f3347b7a1e0a5'
@@ -44,32 +48,40 @@ for (( _p=1; _p <= $((10#${_patchlevel})); _p++ )); do
 done
 
 prepare() {
+  cd "$srcdir"
+
   cd "$_realname-$_basever"
   for (( _p=1; _p <= $((10#${_patchlevel})); _p++ )); do
     msg "applying patch readline${_basever//.}-$(printf "%03d" $_p)"
     patch -p0 -i ../readline${_basever//.}-$(printf "%03d" $_p)
   done
 
-  # patch -p1 -i ../01-include-wchar-h.patch
+  msg "applying midipix-config.patch"
+  patch -p1 -i ../midipix-config.patch
 
   # Note: Arch Linux does something with RPATH here
 }
 
 build() {
+  cd "$srcdir"
   rm -rf "build-$CHOST"
   mkdir "build-$CHOST"
   cd "build-$CHOST"
 
-  # _GNU_SOURCE or _XOPEN_SOURCE is needed for wchar.h to actually define a
-  # prototype for wcwidth.
-  CFLAGS="$CFLAGS -D_XOPEN_SOURCE=700"
+  cp ../config.cache .
+  echo "bash_cv_wcwidth_broken=no" >> config.cache
 
-  "../$_realname-$_basever/configure" --prefix=/usr/"$CHOST"
-  make
+  "../$_realname-$_basever/configure" -C \
+    --prefix="" \
+    --host="$CHOST" \
+    --enable-shared \
+    --disable-static
+
+  make SHLIB_LIBS=-lncursesw
 }
 
 package() {
   cd "build-$CHOST"
-  make DESTDIR="$pkgdir" install
+  make DESTDIR="$pkgdir/usr/$CHOST/" install
   rm "$pkgdir/usr/$CHOST/share/info/dir"
 }
