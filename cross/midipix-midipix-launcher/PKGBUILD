@@ -1,0 +1,17 @@
+# Maintainer: David Grayson <davidegrayson@gmail.com>
+
+_realname=midipix-launcher
+pkgname=$CHOST-$_realname
+pkgver=0.0.1
+pkgrel=1
+pkgdesc='Files needed for actually running your Midipix environment'
+license=('custom')
+arch=('any')
+depends=("${CHOST}-ntctty" "${CHOST}-bash")
+source=(midipix.sh)
+sha256sums=('4a80376356f57e93970844bd2ca3618b05515b18266e59c75564367c666e0f8a')
+
+package() {
+  cd "$srcdir"
+  install -Dm755 midipix.sh "$pkgdir/usr/$CHOST/bin/midipix.sh"
+}

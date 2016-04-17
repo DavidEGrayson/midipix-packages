@@ -35,6 +35,7 @@ def packages_in_order(hosts)
       "#{host}-ncurses",
       "#{host}-readline",
       "#{host}-bash",
+      "#{host}-midipix-launcher",
     ]
   end
 
