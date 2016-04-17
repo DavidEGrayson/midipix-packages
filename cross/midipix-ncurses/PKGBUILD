@@ -15,6 +15,7 @@
 # give a segmentation fault?
 # TODO: stubs for libncurses.so and libncurses++.so like Arch Linux has?
 #   They are just one-line text files.
+# TODO: remove debugging options and add --without-debug back
 
 _realname=ncurses
 pkgname=$CHOST-$_realname
@@ -67,7 +68,6 @@ build() {
      --enable-assertions \
      --with-trace
 
-  # TODO: remove debugging options and add --without-debug back
   make
 }
 
@@ -75,6 +75,7 @@ package() {
   cd "${srcdir}/build-${CHOST}"
   make DESTDIR="${pkgdir}/usr/${CHOST}" install
 
+  # Install license from the README.
   cd "${srcdir}/${_realname}-${pkgver/_/-}"
   mkdir -p "${pkgdir}/usr/$CHOST/share/licenses/${_realname}"
   grep -B 100 '$Id' README > "${pkgdir}/usr/$CHOST/share/licenses/${_realname}/LICENSE"
@@ -90,4 +91,11 @@ package() {
     echo "$cmd"
     $cmd
   done
+
+  # This library is referred to by many different names.
+  cd "${pkgdir}/usr/$CHOST/lib"
+  echo "INPUT(-lncursesw)" > libcurses.so
+  echo "INPUT(-lncursesw)" > libcursesw.so
+  echo "INPUT(-lncursesw)" > libncurses.so
+  echo "INPUT(-lncurses++w)" > libncurses++.so
 }
