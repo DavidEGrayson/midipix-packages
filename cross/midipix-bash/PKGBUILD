@@ -3,6 +3,10 @@
 # TODO: install info files using an install script like Arch Linux does?
 # TODO: get job control working; it's disabled in config.cache and might need
 # to be enabled in configure with --enable-job-control.
+# TODO: don't use the intl that is bundled with bash, make a gettext package instead?
+#   This will probably fix the warning at the end of packaging about
+#   the package containing a reference to $srcdir, and seems generally good.
+# TODO: What about the other files in the lib directory?  Make separate packages?
 
 _realname=bash
 pkgname=$CHOST-$_realname
@@ -134,11 +138,17 @@ build() {
   cd "build-$CHOST"
 
   cp ../config.cache .
+  echo "bash_cv_have_strsignal=yes" >> config.cache
 
   "../$_realname-$_basever/configure" -C \
-    --prefix=/usr/"$CHOST" \
-    --with-curses --enable-readline \
-    --without-bash-malloc --with-installed-readline
+    --build="`gcc -dumpmachine`" \
+    --host="$CHOST" \
+    --prefix="" \
+    --with-curses \
+    --enable-readline \
+    --enable-history \
+    --with-installed-readline \
+    --without-bash-malloc
   make
 }
 
@@ -149,6 +159,6 @@ build() {
 
 package() {
   cd "build-$CHOST"
-  make DESTDIR="$pkgdir" install
+  make DESTDIR="$pkgdir/usr/$CHOST" install
   rm "$pkgdir/usr/$CHOST/share/info/dir"
 }
