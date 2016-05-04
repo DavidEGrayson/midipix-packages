@@ -5,7 +5,7 @@
 
 _realname=midipix-launcher
 pkgname=$CHOST-$_realname
-pkgver=0.0.1
+pkgver=0.0.2
 pkgrel=1
 pkgdesc='Files needed for actually running your Midipix environment'
 license=('custom')
