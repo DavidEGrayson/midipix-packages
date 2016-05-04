@@ -10,6 +10,8 @@ mintty -h always -e sh -c "
   set -o errexit
   stty raw -echo
   export \"PATH=${MIDIPIX_PATH}/bin:${MIDIPIX_PATH}/lib\"
-  ./ntctty.exe -e bash --login -i"
+  ./ntctty.exe -e midipix-start"
+
+# was ./ntctty.exe -e bash --login -i
 
 # TODO: chroot //${MIDIPIX_PATH#/}
