@@ -63,6 +63,11 @@ pacman prompts whener megabuild installs a package, then you can run:
 
         ./megabuild.rb --noconfirm
 
+7. To avoid having to type your password for sudo, you can add the
+following line to a file in `/etc/sudoers.d`:
+
+        yourusername ALL = (root) NOPASSWD: /usr/bin/pacman
+
 
 See also
 ===
