@@ -1,7 +1,7 @@
 # Maintainer: David Grayson <davidegrayson@gmail.com>
 
 pkgname=$CHOST-ntcon
-pkgver=r7.b895c9b
+pkgver=r24.a975fd3
 pkgrel=1
 pkgdesc="Free-standing console interface definitions"
 arch=('any')
@@ -23,7 +23,7 @@ build() {
   mkdir "${srcdir}/build-$CHOST"
   cd "${srcdir}/build-$CHOST"
 
-  ../ntcon/configure --host="$CHOST"
+  ../ntcon/configure --debug --host="$CHOST" --prefix=""
 }
 
 package() {

@@ -1,7 +1,7 @@
 # Maintainer: David Grayson <davidegrayson@gmail.com>
 
 pkgname=$CHOST-ntctty
-pkgver=r71.7ae7c4d
+pkgver=r77.9dd16fc
 pkgrel=1
 pkgdesc="An extensible subsystem and pty server."
 arch=('any')
@@ -22,7 +22,7 @@ build() {
   mkdir "${srcdir}/build-$CHOST"
   cd "${srcdir}/build-$CHOST"
 
-  ../ntctty/configure --host="$CHOST"
+  ../ntctty/configure --debug --host="$CHOST" --prefix=""
 }
 
 package() {

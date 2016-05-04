@@ -1,7 +1,7 @@
 # Maintainer: David Grayson <davidegrayson@gmail.com>
 
 pkgname=$CHOST-dalist
-pkgver=r34.2573588
+pkgver=r40.81a7e93
 pkgrel=1
 pkgdesc="Windows NT native API core library"
 arch=('any')
@@ -22,7 +22,7 @@ build() {
   mkdir "${srcdir}/build-$CHOST"
   cd "${srcdir}/build-$CHOST"
 
-  ../dalist/configure --debug --host="$CHOST"
+  ../dalist/configure --debug --host="$CHOST" --prefix=""
   make
 }
 
