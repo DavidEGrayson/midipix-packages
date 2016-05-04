@@ -36,6 +36,7 @@ def packages_in_order(hosts)
       "#{host}-readline",
       "#{host}-bash",
       "#{host}-midipix-launcher",
+      # TODO: slibtool
     ]
   end
 
@@ -54,6 +55,11 @@ def dependency_satisfied?(dep)
   $?.success?
 end
 
+def package_installed?(package_name)
+  `pacman -Q '#{package_name}'`
+  $?.success?
+end
+
 def show_status(hosts)
   packages = packages_in_order(hosts)
   puts "Dependency status:"
@@ -63,8 +69,14 @@ def show_status(hosts)
   end
 end
 
-def purge(hosts)
-  raise 'not implemented'
+def remove(hosts)
+  packages = packages_in_order(hosts).select { |n| package_installed?(n) }
+  cmd = "sudo pacman -R #{packages.join(' ')}"
+  puts "Removing all packages with command: #{cmd}"
+  success = system(cmd)
+  if !success
+    raise "removing failed"
+  end
 end
 
 def select_build_params(hosts, name)
@@ -236,18 +248,24 @@ def parse_args
     opts.banner = "Usage: megabuild.rb [options]"
     opts.on("-s", "--status", "Just show status") do |v|
       options[:status] = v
+      options[:explicit_action] = true
     end
-    opts.on("--purge", "Uninstall/remove all packages") do |v|
-      options[:purge] = v
+    opts.on("--remove", "Uninstall/remove all packages") do |v|
+      options[:remove] = v
+      options[:explicit_action] = true
     end
     opts.on("--build", "Build packages") do |v|
       options[:build] = v
+      options[:explicit_action] = true
     end
     opts.on("--noconfirm", "Bypass pacman prompts when installing packages.") do |v|
       options[:noconfirm] = v
     end
   end
   option_parser.parse!(ARGV)
+
+  options[:build] = true if !options[:explicit_action]
+
   options
 end
 
@@ -257,15 +275,11 @@ def run
 
   if options[:status]
     show_status(hosts)
-    did_something = true
   end
 
-  if options[:purge]
-    purge(hosts)
-    did_something = true
+  if options[:remove]
+    remove(hosts)
   end
-
-  options[:build] = true if !did_something
 
   if options[:build]
     megabuild(hosts, options)
