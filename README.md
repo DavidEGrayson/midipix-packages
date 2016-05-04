@@ -1,7 +1,7 @@
 This repository contains PKGBUILD scripts for Midipix-related packages.
 
 Using these scripts, you can build a working midipix toolchain
-including GCC, Musl, pscsxl, and ntctty for Arch Linux.
+including GCC, Musl, psxscl, and ntctty for Arch Linux.
 
 The `arch-linux` directory contains packages that are meant to be
 compiled, installed, and executed on an Arch Linux system.  It would
