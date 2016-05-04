@@ -39,6 +39,7 @@ int main()
     }
 
     {
+        // TODO: is chroot actually needed?  Seems like it is isn't.
         int result = chroot("//c/midipix");
         if (result != 0)
         {
