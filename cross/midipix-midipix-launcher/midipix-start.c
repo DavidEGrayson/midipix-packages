@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/wait.h>
 
 int fd_is_valid(int fd)
 {
@@ -44,6 +45,28 @@ int main()
         if (result != 0)
         {
             perror("chroot");
+        }
+    }
+
+    {
+        printf("testing fork...\n");
+        pid_t pid = fork();
+        if (pid == 0)
+        {
+            // Child process.
+            printf("hello from the child (pid %d)\n", getpid());
+            return 0;
+        }
+        else if (pid < 0)
+        {
+            perror("fork");
+        }
+        else
+        {
+            int stat_loc = 0;
+            int options = 0;
+            pid_t result = waitpid(pid, &stat_loc, options);
+            printf("waitpid results: ret=%d, stat_loc=%d\n", result, stat_loc);
         }
     }
 
