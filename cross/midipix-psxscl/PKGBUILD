@@ -3,7 +3,7 @@
 pkgname=$CHOST-psxscl
 provides=($CHOST-psxstub)
 conflicts=($CHOST-psxstub)
-pkgver=r160.4e6d89d
+pkgver=r260.f603112
 pkgrel=1
 pkgdesc="A thread-safe system call layer library"
 arch=('any')
@@ -24,7 +24,7 @@ build() {
   mkdir "${srcdir}/build-$CHOST"
   cd "${srcdir}/build-$CHOST"
 
-  ../psxscl/configure --host="$CHOST"
+  ../psxscl/configure --host="$CHOST" --prefix="" --debug
 }
 
 package() {
