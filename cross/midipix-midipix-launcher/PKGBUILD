@@ -19,7 +19,7 @@ build() {
   mkdir "build-$CHOST"
   cd "build-$CHOST"
 
-  "$CHOST-gcc" --std=c99 -D_GNU_SOURCE -Wall ../midipix-start.c -o midipix-start
+  "$CHOST-gcc" --std=c99 -D_GNU_SOURCE -Wall -O0 -g3 ../midipix-start.c -o midipix-start
 }
 
 package() {

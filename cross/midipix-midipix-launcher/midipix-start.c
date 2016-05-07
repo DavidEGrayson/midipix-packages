@@ -15,7 +15,7 @@ int main()
 
     {
         // TODO: fix this; calling getpid seems to make this program hang
-        //printf("  pid: %s\n", getpid());
+        printf("  pid: %d\n", getpid());
     }
 
     {
@@ -63,6 +63,7 @@ int main()
         }
         else
         {
+            printf("waiting for child (%d)...\n", pid);
             int stat_loc = 0;
             int options = 0;
             pid_t result = waitpid(pid, &stat_loc, options);
