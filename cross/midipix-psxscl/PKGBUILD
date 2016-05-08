@@ -19,6 +19,17 @@ pkgver() {
   printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
+prepare() {
+  cd "${srcdir}/psxscl"
+
+  # midipix will probably fix this soon; remove this patch
+  {
+    echo "#include <psx_utimens.h>"
+    cat src/pollen/_select.c
+  } > tmp
+  mv tmp src/pollen/_select.c
+}
+
 build() {
   rm -rf "${srcdir}/build-$CHOST"
   mkdir "${srcdir}/build-$CHOST"
