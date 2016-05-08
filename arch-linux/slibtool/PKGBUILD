@@ -3,7 +3,7 @@
 pkgname=slibtool
 pkgver=0.5.3
 pkgrel=1
-pkgdesc="Reimplementation of libtool: a generic library support script"
+pkgdesc="A skinny libtool implementation, written in C."
 arch=('i686' 'x86_64')
 url="http://git.midipix.org/cgit.cgi/slibtool"
 license=('MIT')
