@@ -1,0 +1,30 @@
+# Maintainer: David Grayson <davidegrayson@gmail.com>
+
+pkgname=slibtool
+pkgver=0.5.2
+pkgrel=1
+pkgdesc="Reimplementation of libtool: a generic library support script"
+arch=('i686' 'x86_64')
+url="http://git.midipix.org/cgit.cgi/slibtool"
+license=('MIT')
+source=("http://midipix.org/dl/slibtool/slibtool-v${pkgver}.tar.xz"{,.sig})
+sha256sums=('8cf0dec9a53e56b8c04f737de8d6019379bd7568d7aa563640a9869fdd5d5550'
+            'SKIP')
+validpgpkeys=('6482133FE45A8A91EEB0733716997AE880F70A46')
+
+build() {
+  rm -rf "${srcdir}/build-$CARCH"
+  mkdir "${srcdir}/build-$CARCH"
+  cd "${srcdir}/build-$CARCH"
+
+  "../slibtool-v${pkgver}/configure" --prefix=/usr
+  make
+}
+
+package() {
+  cd "${srcdir}/build-$CARCH"
+  make DESTDIR="${pkgdir}" install
+
+  cd "${srcdir}/slibtool-v${pkgver}"
+  install -Dm644 COPYING.SLIBTOOL "${pkgdir}/usr/share/licenses/slibtool/COPYING.SLIBTOOL"
+}

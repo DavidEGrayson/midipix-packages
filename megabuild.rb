@@ -12,7 +12,8 @@ require 'digest'
 def packages_in_order(hosts)
   packages = [
     "lazy",
-    "perk"
+    "perk",
+    "slibtool",
   ]
 
   hosts.each do |host|
