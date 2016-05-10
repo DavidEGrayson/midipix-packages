@@ -37,6 +37,7 @@ def packages_in_order(hosts)
       "#{host}-readline",
       "#{host}-bash",
       "#{host}-midipix-launcher",
+      "#{host}-gmp",
       # TODO: "#{host}-coreutils",
     ]
   end
