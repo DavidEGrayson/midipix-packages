@@ -5,6 +5,7 @@
 # TODO: if not cross-compiling, list help2man as a dependency and make sure
 # man pages get generated.
 # TODO: for cross-compiling figure out how to generate man pages
+# TODO: add attr and acl as dependencies so we can manipulate Posix ACLs?
 
 _realname=coreutils
 pkgname=$CHOST-$_realname
@@ -16,11 +17,9 @@ url='http://www.gnu.org/software/coreutils/coreutils.html'
 license=('GPL3')
 depends=("${CHOST}-gmp"
          "${CHOST}-gettext"
-         "${CHOST}-openssl"
          "${CHOST}-libcap"
          "${CHOST}-libiconv"
-         "${CHOST}-attr"
-         "${CHOST}-acl")
+         "${CHOST}-openssl")
 makedepends=("${CHOST}-gcc")
 source=("https://ftp.gnu.org/gnu/coreutils/coreutils-${pkgver}.tar.xz"{,.sig}
         "http://git.midipix.org/cgit.cgi/ports/portage/plain/config.cache"
