@@ -10,7 +10,7 @@ pkgrel=1
 pkgdesc='Files needed for actually running your Midipix environment'
 license=('custom')
 arch=('any')
-depends=("${CHOST}-ntctty" "${CHOST}-bash")
+depends=("${CHOST}-ntctty")
 source=(midipix.sh midipix-start.c)
 sha256sums=(SKIP SKIP)
 
