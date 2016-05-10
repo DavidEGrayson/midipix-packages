@@ -37,7 +37,7 @@ def packages_in_order(hosts)
       "#{host}-readline",
       "#{host}-bash",
       "#{host}-midipix-launcher",
-      # TODO: slibtool
+      # TODO: "#{host}-coreutils",
     ]
   end
 

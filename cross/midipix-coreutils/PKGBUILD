@@ -1,0 +1,63 @@
+# Maintainer: David Grayson <davidegrayson@gmail.com>
+
+# TODO: have an install hook that calls install-info?
+# TODO: use --with-openssl option to configure?
+# TODO: if not cross-compiling, list help2man as a dependency and make sure
+# man pages get generated.
+# TODO: for cross-compiling figure out how to generate man pages
+
+_realname=coreutils
+pkgname=$CHOST-$_realname
+pkgver=8.25
+pkgrel=1
+pkgdesc='Basic file, shell, and text manipulation utilities.'
+arch=('any')
+url='http://www.gnu.org/software/coreutils/coreutils.html'
+license=('GPL3')
+depends=("${CHOST}-gmp"
+         "${CHOST}-gettext"
+         "${CHOST}-openssl"
+         "${CHOST}-libcap"
+         "${CHOST}-libiconv"
+         "${CHOST}-attr"
+         "${CHOST}-acl")
+makedepends=("${CHOST}-gcc")
+source=("https://ftp.gnu.org/gnu/coreutils/coreutils-${pkgver}.tar.xz"{,.sig}
+        "http://git.midipix.org/cgit.cgi/ports/portage/plain/config.cache"
+        midipix.patch
+        no-help2man.patch)
+sha256sums=('31e67c057a5b32a582f26408c789e11c2e8d676593324849dcf5779296cdce87'
+            'SKIP'
+            '1e8fa44f9da32cf7b33309ce9b60f42427b6c83a7e59aea8f4d577a8a805fc34'
+            '3a2c72a9d71fca70d8a455a36866ae4f8dfd2a28677928b2f2be29b32be38cd8'
+            'f57c69dcf6337ced3b440d47b8d0bdc409ca9d9f33566e4966519768f776a553')
+validpgpkeys=('6C37DC12121A5006BC1DB804DF6FD971306037D9')
+
+prepare() {
+  cd "${srcdir}/${_realname}-${pkgver}"
+  patch -p1 -i ../midipix.patch
+  patch -p1 -i ../no-help2man.patch
+}
+
+build() {
+  rm -rf "build-${CHOST}"
+  mkdir "build-${CHOST}"
+  cd "${srcdir}/build-${CHOST}"
+  cp ../config.cache .
+  "../${_realname}-${pkgver}/configure" -C \
+     --host="${CHOST}" --prefix="" \
+     --with-openssl=yes \
+     --enable-threads=posix \
+     --with-packager="David Grayson"
+  make
+}
+
+check() {
+  cd "build-${CHOST}"
+  # TODO for native compilation: make check
+}
+
+package() {
+  cd "${srcdir}/build-${CHOST}"
+  make DESTDIR="${pkgdir}/usr/${CHOST}" install
+}

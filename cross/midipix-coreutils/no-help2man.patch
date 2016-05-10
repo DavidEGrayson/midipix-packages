@@ -1,0 +1,46 @@
+diff -ur coreutils-8.25-orig/configure coreutils-8.25/configure
+--- coreutils-8.25-orig/configure	2016-05-09 21:03:48.437923444 -0700
++++ coreutils-8.25/configure	2016-05-09 21:08:32.267919528 -0700
+@@ -67262,3 +67262,10 @@
+ $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
+ fi
+ 
++if [ x"$cross_compiling" = xyes ]; then
++        $as_echo "bypassing dependency on help2man"
++	mkdir -p man
++	for f in $srcdir/src/*.c; do src=$(basename $f); doc="${src%.*}"; touch man/$doc.1; done
++	for f in dir sha1sum sha224sum sha256sum sha384sum sha512sum vdir; do touch man/$f.1; done
++	sed -i -e 's/@cross_compiling@/'$cross_compiling'/g' Makefile || exit 2
++fi
+diff -ur coreutils-8.25-orig/Makefile.in coreutils-8.25/Makefile.in
+--- coreutils-8.25-orig/Makefile.in	2016-05-09 21:03:48.437923444 -0700
++++ coreutils-8.25/Makefile.in	2016-05-09 21:08:23.381252984 -0700
+@@ -4974,6 +4974,8 @@
+     $(bin_SCRIPTS) \
+     $(EXTRA_PROGRAMS)
+ 
++CROSS_COMPILE = @cross_compiling@
++
+ pm = progs-makefile
+ pr = progs-readme
+ @CROSS_COMPILING_FALSE@cu_install_program = src/ginstall
+@@ -14384,6 +14386,10 @@
+ @SINGLE_BINARY_FALSE@man/whoami.1:    src/whoami$(EXEEXT)
+ @SINGLE_BINARY_FALSE@man/yes.1:       src/yes$(EXEEXT)
+ 
++ifeq ($(CROSS_COMPILE), yes)
++.x.1:
++
++else
+ .x.1:
+ 	$(AM_V_GEN)name=`echo $@ | sed 's|.*/||; s|\.1$$||'` || exit 1;	\
+ 	case $$name in							\
+@@ -14411,6 +14417,8 @@
+ 	  && rm -rf $$t							\
+ 	  && chmod a-w $@-t						\
+ 	  && mv $@-t $@
++endif
++
+ .PHONY: check-root
+ check-root:
+ 	$(MAKE) check TESTS='$(root_tests)' SUBDIRS=.
