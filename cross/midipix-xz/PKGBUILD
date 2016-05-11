@@ -24,12 +24,12 @@ prepare() {
 }
 
 build() {
-  rm -rf "build-$CHOST"
-  mkdir "build-$CHOST"
-  cd "${srcdir}/build-$CHOST"
+  rm -rf "build-${CHOST}"
+  mkdir "build-${CHOST}"
+  cd "${srcdir}/build-${CHOST}"
   cp ../config.cache .
   "../${_realname}-${pkgver}/configure" -C \
-      --host="$CHOST" --prefix=""
+    --host="$CHOST" --prefix=""
   make
 }
 

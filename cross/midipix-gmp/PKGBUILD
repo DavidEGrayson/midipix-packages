@@ -1,5 +1,8 @@
 # Maintainer: David Grayson <davidegrayson@gmail.com>
 
+# TODO: produce a shared library instead of a static one!
+# TODO: compare our midipix.patch to the portage one; they are doing some stuff we are not
+
 _realname=gmp
 pkgname=$CHOST-$_realname
 pkgver=6.1.0
@@ -29,8 +32,8 @@ build() {
   cd "${srcdir}/build-${CHOST}"
   cp ../config.cache .
   "../${_realname}-${pkgver}/configure" -C \
-    --disable-assembly \
-    --host="${CHOST}" --prefix=""
+    --host="${CHOST}" --prefix="" \
+    --disable-assembly
   make
 }
 
@@ -42,4 +45,6 @@ check() {
 package() {
   cd "${srcdir}/build-${CHOST}"
   make DESTDIR="${pkgdir}/usr/${CHOST}" install
+
+  # TODO: copy license
 }
