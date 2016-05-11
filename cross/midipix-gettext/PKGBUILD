@@ -8,7 +8,8 @@ pkgdesc='Tools for producing multi-lingual messages'
 arch=('any')
 url='https://www.gnu.org/software/gettext/'
 license=('?')
-makedepends=($CHOST-gcc)
+makedepends=("$CHOST-gcc"
+             "$CHOST-ncurses")
 source=("http://ftp.gnu.org/pub/gnu/gettext/gettext-${pkgver}.tar.xz"{,.sig}
         "http://git.midipix.org/cgit.cgi/ports/portage/plain/config.cache"
         midipix-config.patch)
@@ -32,6 +33,7 @@ build() {
     --host="$CHOST" --prefix="" \
     --disable-java --disable-native-java \
     --disable-csharp \
+    --without-libncurses-prefix \
     --enable-shared
   make LIBTOOL=slibtool
 }
