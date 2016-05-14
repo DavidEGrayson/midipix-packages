@@ -6,10 +6,10 @@ diff -ur coreutils-8.25-orig/configure coreutils-8.25/configure
  fi
  
 +if [ x"$cross_compiling" = xyes ]; then
-+        $as_echo "bypassing dependency on help2man"
++       $as_echo "bypassing dependency on help2man"
 +	mkdir -p man
 +	for f in $srcdir/src/*.c; do src=$(basename $f); doc="${src%.*}"; touch man/$doc.1; done
-+	for f in dir sha1sum sha224sum sha256sum sha384sum sha512sum vdir; do touch man/$f.1; done
++	for f in dir base32 sha1sum sha224sum sha256sum sha384sum sha512sum vdir; do touch man/$f.1; done
 +	sed -i -e 's/@cross_compiling@/'$cross_compiling'/g' Makefile || exit 2
 +fi
 diff -ur coreutils-8.25-orig/Makefile.in coreutils-8.25/Makefile.in
