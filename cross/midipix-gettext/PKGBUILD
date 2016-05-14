@@ -1,4 +1,6 @@
 # Maintainer: David Grayson <davidegrayson@gmail.com>
+# This package does not build yet and I have abandoned it because
+# musl itself provides gettext().
 
 _realname=gettext
 pkgname=$CHOST-$_realname
