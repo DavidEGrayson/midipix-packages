@@ -12,16 +12,21 @@ makedepends=("$CHOST-gcc"
              "$CHOST-ncurses")
 source=("http://ftp.gnu.org/pub/gnu/gettext/gettext-${pkgver}.tar.xz"{,.sig}
         "http://git.midipix.org/cgit.cgi/ports/portage/plain/config.cache"
-        midipix-config.patch)
+        midipix-config.patch
+        linker-order.patch)
 sha256sums=('378fa86a091cec3acdece3c961bb8d8c0689906287809a8daa79dc0c6398d934'
             'SKIP'
             '1e8fa44f9da32cf7b33309ce9b60f42427b6c83a7e59aea8f4d577a8a805fc34'
-            'bfaa9408dcded460a20bf842906dfdcb174f304a0e445f8705b2dd3b660c65d8')
+            'bfaa9408dcded460a20bf842906dfdcb174f304a0e445f8705b2dd3b660c65d8'
+            'cab21d30c43c841110b78c351a06b61382a7fde769585dd8e91edbfc76096b9c')
 validpgpkeys=('462225C3B46F34879FC8496CD605848ED7E69871')
 
 prepare() {
   cd "${srcdir}/${_realname}-${pkgver}"
   patch -p1 -i ../midipix-config.patch
+
+  # Library dependencies must come after the other linker arguments.
+  patch -p1 -i ../linker-order.patch
 }
 
 build() {
@@ -30,12 +35,13 @@ build() {
   cd "${srcdir}/build-${CHOST}"
   cp ../config.cache .
   "../${_realname}-${pkgver}/configure" -C \
-    --host="$CHOST" --prefix="" \
+    --host="$CHOST" --prefix= \
     --disable-java --disable-native-java \
     --disable-csharp \
     --without-libncurses-prefix \
-    --enable-shared
-  make LIBTOOL=slibtool
+    --enable-shared \
+    --disable-static
+  make LIBTOOL=slibtool-shared
 }
 
 package() {

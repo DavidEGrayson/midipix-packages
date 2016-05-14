@@ -1,0 +1,111 @@
+diff -ur gettext-0.19.7-orig/gettext-tools/gnulib-lib/Makefile.gnulib gettext-0.19.7/gettext-tools/gnulib-lib/Makefile.gnulib
+--- gettext-0.19.7-orig/gettext-tools/gnulib-lib/Makefile.gnulib	2016-05-13 23:37:35.150117510 -0700
++++ gettext-0.19.7/gettext-tools/gnulib-lib/Makefile.gnulib	2016-05-13 23:43:22.336779385 -0700
+@@ -37,12 +37,12 @@
+ libgettextlib_la_LDFLAGS += $(ISNAND_LIBM)
+ libgettextlib_la_LDFLAGS += $(ISNANF_LIBM)
+ libgettextlib_la_LDFLAGS += $(ISNANL_LIBM)
+-libgettextlib_la_LDFLAGS += $(LIB_ACL)
++libgettextlib_la_LIBADD += $(LIB_ACL)
+ libgettextlib_la_LDFLAGS += $(LOG10_LIBM)
+-libgettextlib_la_LDFLAGS += $(LTLIBICONV)
+-libgettextlib_la_LDFLAGS += $(LTLIBINTL)
+-libgettextlib_la_LDFLAGS += $(LTLIBTHREAD)
+-libgettextlib_la_LDFLAGS += $(LTLIBUNISTRING)
++libgettextlib_la_LIBADD += $(LTLIBICONV)
++libgettextlib_la_LIBADD += $(LTLIBINTL)
++libgettextlib_la_LIBADD += $(LTLIBTHREAD)
++libgettextlib_la_LIBADD += $(LTLIBUNISTRING)
+ libgettextlib_la_LDFLAGS += $(OPENMP_CFLAGS)
+ libgettextlib_la_LDFLAGS += $(POW_LIBM)
+ libgettextlib_la_LDFLAGS += @INTL_MACOSX_LIBS@
+@@ -1199,7 +1199,7 @@
+ libcroco_rpl_la_CPPFLAGS = $(AM_CPPFLAGS) $(NO_CXX)
+ 
+ if GL_COND_LIBTOOL
+-libgettextlib_la_LDFLAGS += $(LTLIBCROCO)
++libgettextlib_la_LIBADD += $(LTLIBCROCO)
+ endif
+ 
+ EXTRA_DIST += libcroco/cr-additional-sel.c libcroco/cr-additional-sel.h libcroco/cr-attr-sel.c libcroco/cr-attr-sel.h libcroco/cr-cascade.c libcroco/cr-cascade.h libcroco/cr-declaration.c libcroco/cr-declaration.h libcroco/cr-doc-handler.c libcroco/cr-doc-handler.h libcroco/cr-enc-handler.c libcroco/cr-enc-handler.h libcroco/cr-fonts.c libcroco/cr-fonts.h libcroco/cr-input.c libcroco/cr-input.h libcroco/cr-num.c libcroco/cr-num.h libcroco/cr-om-parser.c libcroco/cr-om-parser.h libcroco/cr-parser.c libcroco/cr-parser.h libcroco/cr-parsing-location.c libcroco/cr-parsing-location.h libcroco/cr-prop-list.c libcroco/cr-prop-list.h libcroco/cr-pseudo.c libcroco/cr-pseudo.h libcroco/cr-rgb.c libcroco/cr-rgb.h libcroco/cr-sel-eng.c libcroco/cr-sel-eng.h libcroco/cr-selector.c libcroco/cr-selector.h libcroco/cr-simple-sel.c libcroco/cr-simple-sel.h libcroco/cr-statement.c libcroco/cr-statement.h libcroco/cr-string.c libcroco/cr-string.h libcroco/cr-style.c libcroco/cr-style.h libcroco/cr-stylesheet.c libcroco/cr-stylesheet.h libcroco/cr-term.c libcroco/cr-term.h libcroco/cr-tknzr.c libcroco/cr-tknzr.h libcroco/cr-token.c libcroco/cr-token.h libcroco/cr-utils.c libcroco/cr-utils.h libcroco/libcroco-config.h libcroco/libcroco.h
+@@ -1293,7 +1293,7 @@
+ MOSTLYCLEANFILES += glib/*.h-t
+ 
+ if GL_COND_LIBTOOL
+-libgettextlib_la_LDFLAGS += $(LTLIBGLIB)
++libgettextlib_la_LIBADD += $(LTLIBGLIB)
+ endif
+ 
+ EXTRA_DIST += glib.in.h glib/ghash.c glib/ghash.in.h glib/glist.c glib/glist.in.h glib/gmessages.c glib/gprimes.c glib/gprimes.in.h glib/gstrfuncs.c glib/gstrfuncs.in.h glib/gstring.c glib/gstring.in.h glib/gtypes.in.h glibconfig.in.h
+@@ -1751,7 +1751,7 @@
+ MOSTLYCLEANFILES += libxml/*.h-t
+ 
+ if GL_COND_LIBTOOL
+-libgettextlib_la_LDFLAGS += $(LTLIBXML)
++libgettextlib_la_LIBADD += $(LTLIBXML)
+ endif
+ 
+ EXTRA_DIST += libxml/COPYING libxml/DOCBparser.c libxml/DOCBparser.in.h libxml/HTMLparser.c libxml/HTMLparser.in.h libxml/HTMLtree.c libxml/HTMLtree.in.h libxml/SAX.c libxml/SAX.in.h libxml/SAX2.c libxml/SAX2.in.h libxml/buf.c libxml/buf.h libxml/c14n.c libxml/c14n.in.h libxml/catalog.c libxml/catalog.in.h libxml/chvalid.c libxml/chvalid.in.h libxml/debugXML.c libxml/debugXML.in.h libxml/dict.c libxml/dict.in.h libxml/elfgcchack.h libxml/enc.h libxml/encoding.c libxml/encoding.in.h libxml/entities.c libxml/entities.in.h libxml/error.c libxml/globals.c libxml/globals.in.h libxml/hash.c libxml/hash.in.h libxml/legacy.c libxml/libxml.h libxml/list.c libxml/list.in.h libxml/nanoftp.c libxml/nanoftp.in.h libxml/nanohttp.c libxml/nanohttp.in.h libxml/parser.c libxml/parser.in.h libxml/parserInternals.c libxml/parserInternals.in.h libxml/pattern.c libxml/pattern.in.h libxml/relaxng.c libxml/relaxng.in.h libxml/save.h libxml/schemasInternals.in.h libxml/schematron.c libxml/schematron.in.h libxml/threads.c libxml/threads.in.h libxml/timsort.h libxml/tree.c libxml/tree.in.h libxml/trionan.c libxml/uri.c libxml/uri.in.h libxml/valid.c libxml/valid.in.h libxml/xinclude.c libxml/xinclude.in.h libxml/xlink.c libxml/xlink.in.h libxml/xmlIO.c libxml/xmlIO.in.h libxml/xmlautomata.in.h libxml/xmlerror.in.h libxml/xmlexports.in.h libxml/xmlmemory.c libxml/xmlmemory.in.h libxml/xmlmodule.c libxml/xmlmodule.in.h libxml/xmlreader.c libxml/xmlreader.in.h libxml/xmlregexp.c libxml/xmlregexp.in.h libxml/xmlsave.c libxml/xmlsave.in.h libxml/xmlschemas.c libxml/xmlschemas.in.h libxml/xmlschemastypes.c libxml/xmlschemastypes.in.h libxml/xmlstring.c libxml/xmlstring.in.h libxml/xmlunicode.c libxml/xmlunicode.in.h libxml/xmlversion.in.h libxml/xmlwriter.c libxml/xmlwriter.in.h libxml/xpath.c libxml/xpath.in.h libxml/xpathInternals.in.h libxml/xpointer.c libxml/xpointer.in.h
+@@ -3458,7 +3458,7 @@
+ 
+ libgettextlib_la_SOURCES += striconv.h striconv.c
+ if GL_COND_LIBTOOL
+-libgettextlib_la_LDFLAGS += $(LTLIBICONV)
++libgettextlib_la_LIBADD += $(LTLIBICONV)
+ endif
+ 
+ ## end   gnulib module striconv
+@@ -3467,7 +3467,7 @@
+ 
+ libgettextlib_la_SOURCES += striconveh.h striconveh.c
+ if GL_COND_LIBTOOL
+-libgettextlib_la_LDFLAGS += $(LTLIBICONV)
++libgettextlib_la_LIBADD += $(LTLIBICONV)
+ endif
+ 
+ EXTRA_DIST += iconveh.h
+@@ -3916,7 +3916,7 @@
+ ## begin gnulib module terminfo
+ 
+ if GL_COND_LIBTOOL
+-libgettextlib_la_LDFLAGS += $(LTLIBTERMINFO)
++libgettextlib_la_LIBADD += $(LTLIBTERMINFO)
+ endif
+ 
+ EXTRA_DIST += tparm.c tputs.c
+diff -ur gettext-0.19.7-orig/gettext-tools/libgettextpo/Makefile.gnulib gettext-0.19.7/gettext-tools/libgettextpo/Makefile.gnulib
+--- gettext-0.19.7-orig/gettext-tools/libgettextpo/Makefile.gnulib	2016-05-13 23:37:35.113450843 -0700
++++ gettext-0.19.7/gettext-tools/libgettextpo/Makefile.gnulib	2016-05-13 23:41:42.600114093 -0700
+@@ -34,10 +34,10 @@
+ EXTRA_libgnu_la_SOURCES =
+ libgnu_la_LDFLAGS = $(AM_LDFLAGS)
+ libgnu_la_LDFLAGS += -no-undefined
+-libgnu_la_LDFLAGS += $(LTLIBICONV)
+-libgnu_la_LDFLAGS += $(LTLIBINTL)
+-libgnu_la_LDFLAGS += $(LTLIBTHREAD)
+-libgnu_la_LDFLAGS += $(LTLIBUNISTRING)
++libgnu_la_LIBADD += $(LTLIBICONV)
++libgnu_la_LIBADD += $(LTLIBINTL)
++libgnu_la_LIBADD += $(LTLIBTHREAD)
++libgnu_la_LIBADD += $(LTLIBUNISTRING)
+ 
+ ## begin gnulib module absolute-header
+ 
+@@ -1400,7 +1400,7 @@
+ 
+ libgnu_la_SOURCES += striconv.h striconv.c
+ if GL_COND_LIBTOOL
+-libgnu_la_LDFLAGS += $(LTLIBICONV)
++libgnu_la_LIBADD += $(LTLIBICONV)
+ endif
+ 
+ ## end   gnulib module striconv
+@@ -1409,7 +1409,7 @@
+ 
+ libgnu_la_SOURCES += striconveh.h striconveh.c
+ if GL_COND_LIBTOOL
+-libgnu_la_LDFLAGS += $(LTLIBICONV)
++libgnu_la_LIBADD += $(LTLIBICONV)
+ endif
+ 
+ EXTRA_DIST += iconveh.h
