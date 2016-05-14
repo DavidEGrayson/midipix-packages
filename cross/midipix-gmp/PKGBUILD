@@ -32,7 +32,7 @@ build() {
   cd "${srcdir}/build-${CHOST}"
   cp ../config.cache .
   "../${_realname}-${pkgver}/configure" -C \
-    --host="${CHOST}" --prefix="" \
+    --host="${CHOST}" --prefix= \
     --disable-assembly
   make
 }

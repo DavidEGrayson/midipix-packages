@@ -35,7 +35,7 @@ build() {
   mkdir "${srcdir}/build-$CHOST"
   cd "${srcdir}/build-$CHOST"
 
-  ../psxscl/configure --host="$CHOST" --prefix="" --debug
+  ../psxscl/configure --host="$CHOST" --prefix= --debug
 }
 
 package() {

@@ -53,7 +53,7 @@ build() {
 
   "../${_realname}-${pkgver/_/-}/configure" -C \
      --host="$CHOST" \
-     --prefix="" \
+     --prefix= \
      --disable-mixed-case \
      --with-normal \
      --with-debug \

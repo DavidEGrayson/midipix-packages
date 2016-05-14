@@ -22,7 +22,7 @@ build() {
   mkdir "${srcdir}/build-$CHOST"
   cd "${srcdir}/build-$CHOST"
 
-  ../pemagine/configure --debug --host="$CHOST" --prefix=""
+  ../pemagine/configure --debug --host="$CHOST" --prefix=
   make
 }
 

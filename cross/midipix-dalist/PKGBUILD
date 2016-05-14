@@ -22,7 +22,7 @@ build() {
   mkdir "${srcdir}/build-$CHOST"
   cd "${srcdir}/build-$CHOST"
 
-  ../dalist/configure --debug --host="$CHOST" --prefix=""
+  ../dalist/configure --debug --host="$CHOST" --prefix=
   make
 }
 

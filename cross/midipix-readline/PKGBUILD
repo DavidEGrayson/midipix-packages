@@ -72,7 +72,7 @@ build() {
   echo "bash_cv_wcwidth_broken=no" >> config.cache
 
   "../$_realname-$_basever/configure" -C \
-    --prefix="" \
+    --prefix= \
     --host="$CHOST" \
     --enable-shared \
     --disable-static

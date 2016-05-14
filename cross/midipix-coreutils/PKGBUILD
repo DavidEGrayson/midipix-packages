@@ -16,9 +16,7 @@ arch=('any')
 url='http://www.gnu.org/software/coreutils/coreutils.html'
 license=('GPL3')
 depends=("${CHOST}-gmp"
-         "${CHOST}-gettext"
          "${CHOST}-libcap"
-         "${CHOST}-libiconv"
          "${CHOST}-openssl")
 makedepends=("${CHOST}-gcc")
 source=("https://ftp.gnu.org/gnu/coreutils/coreutils-${pkgver}.tar.xz"{,.sig}
@@ -44,7 +42,7 @@ build() {
   cd "${srcdir}/build-${CHOST}"
   cp ../config.cache .
   "../${_realname}-${pkgver}/configure" -C \
-     --host="${CHOST}" --prefix="" \
+     --host="${CHOST}" --prefix= \
      --with-openssl=yes \
      --enable-threads=posix \
      --with-packager="David Grayson"

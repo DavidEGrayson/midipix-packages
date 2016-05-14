@@ -23,7 +23,7 @@ build() {
   mkdir "${srcdir}/build-$CHOST"
   cd "${srcdir}/build-$CHOST"
 
-  ../ntcon/configure --debug --host="$CHOST" --prefix=""
+  ../ntcon/configure --debug --host="$CHOST" --prefix=
 }
 
 package() {

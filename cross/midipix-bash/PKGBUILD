@@ -142,7 +142,7 @@ build() {
   "../$_realname-$_basever/configure" -C \
     --build="`gcc -dumpmachine`" \
     --host="$CHOST" \
-    --prefix="" \
+    --prefix= \
     --with-curses \
     --enable-readline \
     --enable-history \
