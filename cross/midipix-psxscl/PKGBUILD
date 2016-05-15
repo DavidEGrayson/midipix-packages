@@ -3,11 +3,11 @@
 pkgname=$CHOST-psxscl
 provides=($CHOST-psxstub)
 conflicts=($CHOST-psxstub)
-pkgver=r267.636c810
+pkgver=r288.7c45d74
 pkgrel=1
 pkgdesc="A thread-safe system call layer library"
 arch=('any')
-url="http://git.midipix.org/$midipix_internal/psxscl"
+url="http://git.midipix.org/cgit.cgi/psxscl"
 license=('GPL2' 'GPL3')
 depends=()
 makedepends=($CHOST-{gcc,ntapi,psxtypes,pemagine,dalist})
