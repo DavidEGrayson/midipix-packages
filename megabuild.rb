@@ -14,6 +14,7 @@ def packages_in_order(hosts)
     "lazy",
     "perk",
     "slibtool",
+    "mdso",  # not really needed
   ]
 
   hosts.each do |host|

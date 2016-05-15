@@ -1,0 +1,33 @@
+# Maintainer: David Grayson <davidegrayson@gmail.com>
+
+pkgname=mdso
+pkgver=r125.b8d3ab4
+pkgrel=1
+pkgdesc="Tool for creating Midipix-specific import libraries"
+arch=('i686' 'x86_64')
+url="http://git.midipix.org/cgit.cgi/mdso"
+license=('MIT')
+source=("git://midipix.org/${midipix_internal}/mdso")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "${srcdir}/${pkgname}"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  rm -rf "${srcdir}/build-$CARCH"
+  mkdir "${srcdir}/build-$CARCH"
+  cd "${srcdir}/build-$CARCH"
+
+  "../${pkgname}/configure" --prefix=/usr
+  make
+}
+
+package() {
+  cd "${srcdir}/build-$CARCH"
+  make DESTDIR="${pkgdir}" install
+
+  cd "${srcdir}/mdso"
+  install -Dm644 COPYING.MDSO "${pkgdir}/usr/share/licenses/${pkgname}/COPYING.MDSO"
+}
