@@ -9,6 +9,7 @@ cd "${MIDIPIX_PATH}/bin"
 mintty -h always -e sh -c "
   set -o errexit
   stty raw -echo
+  export MIDIPIX=MIDIPIX64
   export \"PATH=${MIDIPIX_PATH}/bin:${MIDIPIX_PATH}/lib\"
   ./ntctty.exe -e midipix-start"
 
