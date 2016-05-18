@@ -1,7 +1,7 @@
 # Maintainer: David Grayson <davidegrayson@gmail.com>
 
 pkgname=$CHOST-pemagine
-pkgver=r49.39423d0
+pkgver=r52.90e9fb1
 pkgrel=1
 pkgdesc="A (virtual) tour into portable bits and executable bytes"
 arch=('any')
