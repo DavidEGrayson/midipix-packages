@@ -1,10 +1,12 @@
+# Maintainer: David Grayson <davidegrayson@gmail.com>
+
 pkgname=mingw-w64-tools
 pkgver=5.0rc2
 _pkgver=${pkgver/rc/-rc}
 pkgrel=1
 pkgdesc="MinGW-w64 utilities"
 arch=('i686' 'x86_64')
-url="http://mingw-w64.sourceforge.net"
+url="http://mingw-w64.org/"
 license=('GPL3' 'LGPL2')
 groups=('mingw-w64')
 options=(!libtool !emptydirs)
