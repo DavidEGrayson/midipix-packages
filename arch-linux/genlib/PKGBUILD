@@ -1,0 +1,33 @@
+# Maintainer: David Grayson <davidegrayson@gmail.com>
+
+pkgname=genlib
+pkgver=r6.568d099
+pkgrel=1
+pkgdesc="Tool for generating import libraries (alternative to binutils dlltool)"
+arch=('i686' 'x86_64')
+url="https://github.com/martell/genlib"
+license=('GPL3')
+source=("git+https://github.com/martell/genlib")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "${srcdir}/genlib"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  rm -rf "${srcdir}/build-$CARCH"
+  mkdir "${srcdir}/build-$CARCH"
+  cd "${srcdir}/build-$CARCH"
+
+  ../genlib/configure --prefix=/usr
+  make
+}
+
+package() {
+  cd "${srcdir}/build-$CARCH"
+  make DESTDIR="${pkgdir}" install
+
+  cd "${srcdir}/genlib"
+  install -Dm644 COPYING "${pkgdir}/usr/share/licenses/genlib/COPYING"
+}
