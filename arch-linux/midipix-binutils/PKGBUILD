@@ -16,7 +16,7 @@ depends=('zlib')
 source=("ftp://sourceware.org/pub/binutils/snapshots/binutils-${pkgver}.tar.bz2"
         "http://git.midipix.org/cgit.cgi/ports/portage/plain/binutils-${pkgver}.midipix.patch")
 sha256sums=('250d3b2925c6b211fb16173b0b25bc091c58829fbcad3eb849645e0af52cf7fa'
-            'a0416bd5ae94dcf08fea96b31e1cc129c0731bad17a2e92a5a835f4c72770359')
+            'fb18dac32cdd4e266f84906494d34b8051aacb7c5713def872d623b72ef0f094')
 
 prepare() {
   cd "${srcdir}/binutils-${pkgver}"

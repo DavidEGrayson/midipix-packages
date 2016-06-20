@@ -17,7 +17,7 @@ else
 fi
 
 _muslver=1.1.12
-pkgver=1.1.12.r48.e43f5af
+pkgver=1.1.12.r52.78e4c0f
 pkgrel=1
 pkgdesc="C standard library implementation (musl) for midipix 64-bit target"
 arch=('any')

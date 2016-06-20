@@ -32,7 +32,7 @@ else
   depends=(zlib libmpc $_target-binutils $_target-musl)
   makedepends=(mpfr)
 fi
-pkgver=4.6.4.r59.686fe4e
+pkgver=4.6.4.r60.837022c
 pkgrel=1
 pkgdesc="The GNU Compiler Collection - cross compiler for midipix 64-bit target"
 arch=('i686' 'x86_64')

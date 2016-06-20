@@ -40,7 +40,7 @@ def packages_in_order(hosts)
       "#{host}-bash",
       "#{host}-midipix-launcher",
       "#{host}-gmp",
-      # TODO: "#{host}-coreutils",
+      "#{host}-coreutils",
     ]
   end
 

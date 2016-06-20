@@ -1,7 +1,7 @@
 # Maintainer: David Grayson <davidegrayson@gmail.com>
 
 pkgname=$CHOST-ntapi
-pkgver=r68.d34088b
+pkgver=r112.262e3bc
 pkgrel=1
 pkgdesc="Windows NT native API core library"
 arch=('any')

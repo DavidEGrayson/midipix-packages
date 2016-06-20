@@ -23,7 +23,7 @@ source=("https://ftp.gnu.org/gnu/readline/readline-$_basever.tar.gz"{,.sig}
         "midipix-config.patch")
 sha256sums=('56ba6071b9462f980c5a72ab0023893b65ba6debb4eeb475d7a563dc65cafd43'
             'SKIP'
-            '7e900939da92ab4c1df5a655ee2ea72f56cea1bbf0cad60cba3c76b6fe890f40'
+            '1e8fa44f9da32cf7b33309ce9b60f42427b6c83a7e59aea8f4d577a8a805fc34'
             '806a2bde8571293ecc4a01dea2071b09f9c85599a9cbee040ca9a06ed5e85a9f'
             '1a79bbb6eaee750e0d6f7f3d059b30a45fc54e8e388a8e05e9c3ae598590146f'
             'SKIP'

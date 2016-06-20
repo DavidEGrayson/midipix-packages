@@ -1,7 +1,7 @@
 # Maintainer: David Grayson <davidegrayson@gmail.com>
 
 pkgname=$CHOST-ntcon
-pkgver=r24.a975fd3
+pkgver=r33.5be1cfb
 pkgrel=1
 pkgdesc="Free-standing console interface definitions"
 arch=('any')

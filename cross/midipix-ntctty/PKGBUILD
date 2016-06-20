@@ -1,7 +1,7 @@
 # Maintainer: David Grayson <davidegrayson@gmail.com>
 
 pkgname=$CHOST-ntctty
-pkgver=r77.9dd16fc
+pkgver=r99.ef0d213
 pkgrel=1
 pkgdesc="An extensible subsystem and pty server."
 arch=('any')
