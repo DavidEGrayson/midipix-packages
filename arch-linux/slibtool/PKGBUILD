@@ -1,14 +1,14 @@
 # Maintainer: David Grayson <davidegrayson@gmail.com>
 
 pkgname=slibtool
-pkgver=0.5.5
+pkgver=0.5.7
 pkgrel=1
 pkgdesc="A skinny libtool implementation, written in C."
 arch=('i686' 'x86_64')
 url="http://git.midipix.org/cgit.cgi/slibtool"
 license=('MIT')
 source=("http://midipix.org/dl/slibtool/slibtool-${pkgver}.tar.xz"{,.sig})
-sha256sums=('5b43ab54c7d40ec72225e3bacaf03098f77e92d79aa6ef3840b51cfab6be7c8e'
+sha256sums=('c39d8b91c4a4c7929a80fd89eb540ae7f647c0b5ad181a2e9f38d26c098b312e'
             'SKIP')
 validpgpkeys=('6482133FE45A8A91EEB0733716997AE880F70A46')
 
